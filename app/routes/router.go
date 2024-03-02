@@ -2,6 +2,9 @@ package routes
 
 import (
 	"api/app/controller"
+	"api/app/controller/cart"
+	"api/app/controller/category"
+	"api/app/controller/product"
 	"api/app/lib"
 	"api/app/middleware"
 
@@ -30,6 +33,33 @@ func Handle(app *fiber.App) {
 	api.Get("/", controller.GetAPIIndex)
 	api.Get("/info.json", controller.GetAPIInfo)
 	api.Post("/logs", controller.PostLogs)
+
+	// Cart
+	cartAPI := api.Group("/carts")
+	cartAPI.Use(middleware.TokenValidator())
+	cartAPI.Post("/", cart.PostCart)
+	cartAPI.Get("/", cart.GetCart)
+	cartAPI.Put("/:id", cart.PutCart)
+	cartAPI.Get("/:id", cart.GetCartID)
+	cartAPI.Delete("/:id", cart.DeleteCart)
+
+	// Category
+	categoryAPI := api.Group("/categories")
+	categoryAPI.Use(middleware.TokenValidator())
+	categoryAPI.Post("/", category.PostCategory)
+	categoryAPI.Get("/", category.GetCategory)
+	categoryAPI.Put("/:id", category.PutCategory)
+	categoryAPI.Get("/:id", category.GetCategoryID)
+	categoryAPI.Delete("/:id", category.DeleteCategory)
+
+	// Product
+	productAPI := api.Group("/products")
+	productAPI.Use(middleware.TokenValidator())
+	productAPI.Post("/", product.PostProduct)
+	productAPI.Get("/", product.GetProduct)
+	productAPI.Put("/:id", product.PutProduct)
+	productAPI.Get("/:id", product.GetProductID)
+	productAPI.Delete("/:id", product.DeleteProduct)
 
 	// transaction
 	transactionAPI := api.Group("/transactions")
