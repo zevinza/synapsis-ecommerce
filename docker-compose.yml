@@ -1,0 +1,115 @@
+version: '3.8'
+
+networks:
+  go: {}
+
+volumes:
+  goroot: {}
+  gocache: {}
+  kasirdata: {}
+
+services:
+  go:
+    image: golang:latest
+    volumes:
+      - goroot:/go
+      - gocache:/.cache/go-build
+      - .:/project
+    ports:
+      - 8000:8000
+    working_dir: /project
+    environment:
+      - TZ=UTC
+      - PORT=8000
+    command:
+      - tail
+      - -f
+      - /etc/hosts
+    networks:
+      - go
+  test:
+    image: golang:latest
+    volumes:
+      - goroot:/go
+      - gocache:/.cache/go-build
+      - .:/project
+    working_dir: /project
+    command:
+      - sh
+      - -c
+      - "go get -d && go test -v -coverprofile cover.txt ./... && go tool cover -func cover.txt"
+    networks:
+      - go
+  postgres:
+    image: postgres:9.5
+    volumes:
+      - kasirdata:/var/lib/postgresql/data
+    environment:
+      - TZ=UTC
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - 55432:5432
+    networks:
+      go:
+        aliases:
+          - postgres
+  redis:
+    image: redis:alpine
+    environment:
+      - TZ=UTC
+    ports:
+      - 6379:6379  
+    networks:
+      go:
+        aliases:
+          - redis
+  swagger:
+    image: swaggerapi/swagger-ui:latest
+    environment:
+      - URL=/docs/swagger.yaml
+    volumes:
+      - ./docs:/usr/share/nginx/html/docs
+    ports:
+      - 8080:8080
+  oauth2:
+    image: registry.tog.co.id/monstergroup-solo/kasirkita/oauth2-service:latest
+    volumes:
+      - ./services/oauth2.env:/.env:ro
+    ports:
+      - "9096:9096"
+    environment:
+      - TZ=UTC
+    restart: unless-stopped
+    networks:
+      go:
+        aliases:
+          - oauth2
+  ms-user:
+    image: registry.tog.co.id/monstergroup-solo/kasirkita/user-service:latest
+    volumes:
+      - ./services/ms-user.env:/.env:ro
+    ports:
+      - "8002:8002"
+    environment:
+      - TZ=UTC
+    restart: unless-stopped
+    networks:
+      go:
+        aliases:
+          - ms-user
+  ms-multimedia:
+    image: registry.tog.co.id/monstergroup-solo/kasirkita/multimedia-service:latest
+    volumes:
+      - ./services/ms-multimedia.env:/.env:ro
+      - ./data/tmp:/tmp
+    ports:
+      - "8003:8003"      
+    environment:
+      - TZ=UTC
+    restart: unless-stopped
+    networks:
+      go:
+        aliases:
+          - ms-multimedia
