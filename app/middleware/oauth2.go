@@ -3,14 +3,13 @@ package middleware
 import (
 	"api/app/lib"
 	"api/app/model"
-	"bytes"
 	"encoding/json"
-	"fmt"
-	"mime/multipart"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt"
 	"github.com/spf13/viper"
 )
 
@@ -62,49 +61,25 @@ func Oauth2Authentication(c *fiber.Ctx) error {
 }
 
 // GenerateAccessToken func
-func GenerateAccessToken(t *model.LoginAPI) (model.ResponseToken, error) {
+func GenerateAccessToken(user *model.User) (model.ResponseToken, error) {
 	result := model.ResponseToken{}
-	url := os.Getenv("HOST_OAUTH2_SERVER") + "/token"
-	method := "POST"
+	exp := viper.GetInt("TOKEN_EXPIRE_IN")
 
-	payload := &bytes.Buffer{}
-	writer := multipart.NewWriter(payload)
-	_ = writer.WriteField("grant_type", "password")
-	_ = writer.WriteField("client_id", os.Getenv("OAUTH2_CLIENT_ID"))
-	_ = writer.WriteField("client_secret", os.Getenv("OAUTH2_CLIENT_SECRET"))
-	_ = writer.WriteField("username", *t.Username)
-	_ = writer.WriteField("password", *t.Password)
-	err := writer.Close()
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
+		jwt.MapClaims{
+			"user_id": user.ID.String(),
+			"exp":     time.Now().Add(time.Second * time.Duration(int64(exp))).Unix(),
+		})
+
+	tokenString, err := token.SignedString(viper.GetString("TOKEN_KEY"))
 	if err != nil {
-		lib.Logs.Println(err)
 		return result, err
 	}
 
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
-	if err != nil {
-		lib.Logs.Println(err)
-		return result, err
-	}
-	req.Header.Set("Content-Type", writer.FormDataContentType())
-	res, err := client.Do(req)
-	if err != nil {
-		lib.Logs.Println(err)
-		return result, err
-	}
-	defer res.Body.Close()
+	return model.ResponseToken{
+		AccessToken: &tokenString,
+		ExpiresIn:   &exp,
+		TokenType:   lib.Strptr("Bearer"),
+	}, nil
 
-	if res.StatusCode != 200 {
-		return result, fmt.Errorf("Unauthorized")
-	}
-	var jsonData map[string]interface{}
-	json.NewDecoder(res.Body).Decode(&jsonData)
-	jsonByte := []byte(string(lib.ConvertJsonToStr(jsonData)))
-	err = json.Unmarshal(jsonByte, &result)
-	if err != nil {
-		lib.Logs.Println(err)
-		return result, err
-	}
-
-	return result, nil
 }

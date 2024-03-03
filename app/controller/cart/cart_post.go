@@ -24,16 +24,34 @@ import (
 // @Router /carts [post]
 // @Tags Cart
 func PostCart(c *fiber.Ctx) error {
+	db := services.DB.WithContext(c.UserContext())
+
 	api := new(model.CartAPI)
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)
 	}
+	userID := lib.GetXUserID(c)
+	if api.Quantity == nil {
+		api.Quantity = lib.Int64ptr(1)
+	}
 
-	db := services.DB.WithContext(c.UserContext())
+	product := model.Product{}
+	db.Where(`id = ?`, api.ProductID).Take(&product)
 
 	var data model.Cart
+	if row := db.Where(`product_id = ? AND user_id = ?`, api.ProductID, userID).Take(&data); row.RowsAffected > 0 {
+		qty := lib.RevInt64(data.Quantity) + lib.RevInt64(api.Quantity)
+		data.Quantity = &qty
+		data.Price = lib.Float64ptr(float64(qty) * lib.RevFloat64(product.Price))
+		if err := db.Updates(&data).Error; nil != err {
+			return lib.ErrorConflict(c)
+		}
+		return lib.OK(c, data)
+	}
 	lib.Merge(api, &data)
-	data.CreatorID = lib.GetXUserID(c)
+	data.CreatorID = userID
+	data.UserID = userID
+	data.Price = lib.Float64ptr(float64(lib.RevInt64(api.Quantity)) * lib.RevFloat64(product.Price))
 
 	if err := db.Create(&data).Error; nil != err {
 		return lib.ErrorConflict(c, err.Error())

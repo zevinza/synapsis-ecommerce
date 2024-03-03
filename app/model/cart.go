@@ -7,6 +7,7 @@ type Cart struct {
 	Base
 	DataOwner
 	CartAPI
+	Product *Product `json:"product,omitempty" gorm:"foreignKey:ID;references:ProductID"`
 }
 
 // CartAPI Cart API

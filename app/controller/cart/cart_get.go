@@ -30,7 +30,7 @@ func GetCart(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext()).WithContext(c.UserContext())
 	pg := services.PG
 
-	mod := db.Model(&model.Cart{})
+	mod := db.Model(&model.Cart{}).Where(`user_id = ?`, lib.GetXUserID(c))
 
 	page := pg.With(mod).Request(c.Request()).Response(&[]model.Cart{})
 
