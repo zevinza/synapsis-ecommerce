@@ -21,3 +21,9 @@ type TransactionAPI struct {
 	ContactName       *string    `json:"contact_name,omitempty"`
 	ContactDetail     *string    `json:"contact_detail,omitempty"`
 }
+
+type TransactionPayload struct {
+	Data    *TransactionAPI         `json:"data,omitempty"`
+	Payment *TransactionPaymentAPI  `json:"payment,omitempty"`
+	Details *[]TransactionDetailAPI `json:"details,omitempty"`
+}
