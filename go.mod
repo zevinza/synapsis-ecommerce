@@ -4,7 +4,6 @@ go 1.16
 
 require (
 	github.com/bytedance/sonic v1.10.2
-	github.com/glebarez/sqlite v1.9.0
 	github.com/go-openapi/strfmt v0.21.10
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/go-redis/redis/v8 v8.11.5
@@ -13,6 +12,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.5.0
 	github.com/iancoleman/strcase v0.3.0
+	github.com/klauspost/cpuid/v2 v2.2.3 // indirect
 	github.com/morkid/gocache v1.0.0
 	github.com/morkid/gocache-redis/v8 v8.0.1
 	github.com/morkid/paginate v1.1.4
@@ -23,5 +23,4 @@ require (
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/driver/sqlite v1.5.3
 	gorm.io/gorm v1.25.4
-	lab.tog.co.id/pub/pgsdk v1.1.3
 )

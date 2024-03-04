@@ -149,7 +149,7 @@ func ErrorNotFound(c *fiber.Ctx, message ...string) error {
 	return Send(c, 404, message[0])
 }
 
-// ErrorNotAllowed send http 404 not Allowed
+// ErrorNotAllowed send http 405 not Allowed
 func ErrorNotAllowed(c *fiber.Ctx, message ...string) error {
 	if len(message) == 0 {
 		message = append(message, "Not Allowed")

@@ -1,4 +1,4 @@
-package product
+package user
 
 import (
 	"api/app/lib"
@@ -9,24 +9,24 @@ import (
 	"github.com/google/uuid"
 )
 
-// PutProduct godoc
-// @Summary Update Product by id
-// @Description Update Product by id
-// @Param id path string true "Product ID"
-// @Param data body model.ProductAPI true "Product data"
+// PutUser godoc
+// @Summary Update User by id
+// @Description Update User by id
+// @Param id path string true "User ID"
+// @Param data body model.UserAPI true "User data"
 // @Accept  application/json
 // @Produce application/json
-// @Success 200 {object} model.Product "Product data"
+// @Success 200 {object} model.User "User data"
 // @Failure 400 {object} lib.Response
 // @Failure 404 {object} lib.Response
 // @Failure 409 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
 // @Security ApiKeyAuth
-// @Router /products/{id} [put]
-// @Tags Product
-func PutProduct(c *fiber.Ctx) error {
-	api := new(model.ProductAPI)
+// @Router /users/{id} [put]
+// @Tags User
+func PutUser(c *fiber.Ctx) error {
+	api := new(model.UserPayload)
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)
 	}
@@ -34,9 +34,13 @@ func PutProduct(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext())
 	id, _ := uuid.Parse(c.Params("id"))
 
-	var data model.Product
+	if !lib.GetXIsAdmin(c) && lib.GetXUserID(c) != nil {
+		id = *lib.GetXUserID(c)
+	}
+
+	var data model.User
 	result := db.Model(&data).
-		Where(db.Where(model.Product{
+		Where(db.Where(model.User{
 			Base: model.Base{
 				ID: &id,
 			},

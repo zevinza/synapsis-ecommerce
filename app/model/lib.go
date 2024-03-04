@@ -37,3 +37,5 @@ func randomNumber(length int) *string {
 	res := string(result)
 	return &res
 }
+
+func strptr(s string) *string { return &s }

@@ -1,4 +1,4 @@
-package category
+package user
 
 import (
 	"api/app/lib"
@@ -8,30 +8,34 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// PostCategory godoc
-// @Summary Create new Category
-// @Description Create new Category
-// @Param data body model.CategoryAPI true "Category data"
+// PostUser godoc
+// @Summary Create new User
+// @Description Create new User
+// @Param data body model.UserAPI true "User data"
 // @Accept  application/json
 // @Produce application/json
-// @Success 201 {object} model.Category "Category data"
+// @Success 201 {object} model.User "User data"
 // @Failure 400 {object} lib.Response
 // @Failure 404 {object} lib.Response
 // @Failure 409 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
 // @Security ApiKeyAuth
-// @Router /categories [post]
-// @Tags Category
-func PostCategory(c *fiber.Ctx) error {
-	api := new(model.CategoryAPI)
+// @Router /users [post]
+// @Tags User
+func PostUser(c *fiber.Ctx) error {
+	api := new(model.UserAPI)
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)
 	}
 
+	if !lib.GetXIsAdmin(c) {
+		return lib.ErrorUnauthorized(c)
+	}
+
 	db := services.DB.WithContext(c.UserContext())
 
-	var data model.Category
+	var data model.User
 	lib.Merge(api, &data)
 	data.CreatorID = lib.GetXUserID(c)
 

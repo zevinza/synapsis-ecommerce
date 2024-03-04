@@ -1,8 +1,6 @@
 package model
 
 import (
-	"time"
-
 	"github.com/go-openapi/strfmt"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -21,7 +19,6 @@ type Base struct {
 
 // BeforeCreate Data
 func (b *Base) BeforeCreate(tx *gorm.DB) (e error) {
-	now := strfmt.DateTime(time.Now())
 
 	if nil == b.ID {
 		var id uuid.UUID
@@ -30,10 +27,10 @@ func (b *Base) BeforeCreate(tx *gorm.DB) (e error) {
 	}
 
 	if b.CreatedAt == nil {
-		b.CreatedAt = &now
+		b.CreatedAt = now()
 	}
 	if b.UpdatedAt == nil {
-		b.UpdatedAt = &now
+		b.UpdatedAt = now()
 	}
 
 	return e
@@ -41,7 +38,6 @@ func (b *Base) BeforeCreate(tx *gorm.DB) (e error) {
 
 // BeforeUpdate Data
 func (b *Base) BeforeUpdate(tx *gorm.DB) error {
-	now := strfmt.DateTime(time.Now())
-	b.UpdatedAt = &now
+	b.UpdatedAt = now()
 	return nil
 }

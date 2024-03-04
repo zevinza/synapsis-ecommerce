@@ -1,4 +1,4 @@
-basePath: /api/v1/transaction
+basePath: /api/v1
 definitions:
   lib.Page:
     properties:
@@ -46,708 +46,267 @@ definitions:
         description: http status
         type: integer
     type: object
-  model.PaymentTransaction:
+  model.Cart:
     properties:
       additional:
         type: string
-      amount:
+      price:
+        description: Price
+        example: 10000
         type: number
-      approval_code:
+      product:
+        $ref: '#/definitions/model.Product'
+      productid:
+        description: ProductID
+        format: uuid
         type: string
-      approval_local_timestamp:
-        format: date-time
+      quantity:
+        description: Quantity
+        example: 1
+        type: integer
+      userid:
+        description: UserID
+        format: uuid
         type: string
-      approval_timestamp:
-        format: date-time
+    type: object
+  model.CartAPI:
+    properties:
+      price:
+        description: Price
+        example: 10000
+        type: number
+      productid:
+        description: ProductID
+        format: uuid
         type: string
-      comment:
+      quantity:
+        description: Quantity
+        example: 1
+        type: integer
+      userid:
+        description: UserID
+        format: uuid
         type: string
-      currency_id:
+    type: object
+  model.Category:
+    properties:
+      additional:
+        type: string
+      code:
+        description: Code
+        example: food
+        type: string
+      name:
+        description: Name
+        example: Food
+        type: string
+    type: object
+  model.CategoryAPI:
+    properties:
+      code:
+        description: Code
+        example: food
+        type: string
+      name:
+        description: Name
+        example: Food
+        type: string
+    type: object
+  model.LoginAPI:
+    properties:
+      password:
+        example: '@Password123'
+        type: string
+      remember:
+        example: true
+        type: boolean
+      username:
+        example: armadamuhammads@gmail.com
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  model.LoginResponse:
+    properties:
+      token:
+        $ref: '#/definitions/model.ResponseToken'
+      user:
+        $ref: '#/definitions/model.User'
+    type: object
+  model.Product:
+    properties:
+      additional:
+        type: string
+      categoryid:
+        description: CategoryID
         format: uuid
         type: string
       description:
+        description: Description
         type: string
-      partner_transaction_number:
+      name:
+        description: Name
+        example: Sepatu
         type: string
-      partner_transaction_status:
-        type: string
-      payment_gateway_id:
-        format: uuid
-        type: string
-      payment_type:
-        enum:
-        - cash
-        - cashless
-        type: string
-      reference_number:
-        format: uuid
-        type: string
-      transaction_id:
-        type: string
-      transaction_number:
-        type: string
-      transaction_status:
-        enum:
-        - paid
-        - due
-        - partial
-        type: string
-      transaction_timestamp:
-        format: date-time
-        type: string
-      transaction_type:
-        type: string
-    required:
-    - payment_type
-    - transaction_status
-    type: object
-  model.PaymentTransactionAPI:
-    properties:
-      amount:
+      price:
+        description: Price
+        example: 10000
         type: number
-      approval_code:
+      sku:
+        description: SKU
+        example: PR-0000001
         type: string
-      approval_local_timestamp:
-        format: date-time
-        type: string
-      approval_timestamp:
-        format: date-time
-        type: string
-      comment:
-        type: string
-      currency_id:
+    type: object
+  model.ProductAPI:
+    properties:
+      categoryid:
+        description: CategoryID
         format: uuid
         type: string
       description:
+        description: Description
         type: string
-      partner_transaction_number:
+      name:
+        description: Name
+        example: Sepatu
         type: string
-      partner_transaction_status:
+      price:
+        description: Price
+        example: 10000
+        type: number
+      sku:
+        description: SKU
+        example: PR-0000001
         type: string
-      payment_gateway_id:
-        format: uuid
+    type: object
+  model.RegistrationAPI:
+    properties:
+      confirm_password:
+        example: '@Password123'
         type: string
-      payment_type:
-        enum:
-        - cash
-        - cashless
+      email:
+        example: armadamuhammads@gmail.com
         type: string
-      reference_number:
-        format: uuid
+      first_name:
+        example: Armada
         type: string
-      transaction_id:
+      last_name:
+        example: Muhammad
         type: string
-      transaction_number:
+      password:
+        example: '@Password123'
+        minLength: 8
         type: string
-      transaction_status:
-        enum:
-        - paid
-        - due
-        - partial
-        type: string
-      transaction_timestamp:
-        format: date-time
-        type: string
-      transaction_type:
+      phone_number:
+        example: "089678009400"
         type: string
     required:
-    - payment_type
-    - transaction_status
+    - confirm_password
+    - email
+    - first_name
+    - password
     type: object
-  model.Transaction:
+  model.ResponseToken:
     properties:
-      additional:
+      access_token:
         type: string
-      business_id:
-        description: Business ID
-        format: uuid
-        type: string
-      business_location_id:
-        description: Business Location ID
-        format: uuid
-        type: string
-      contact_id:
-        description: Contact ID
-        format: uuid
-        type: string
-      contact_mobile:
-        example: "089123456789"
-        type: string
-      contact_name:
-        example: alan
-        type: string
-      flow:
-        description: Flow is filled by status transaction
-        example: draft|ordered|cancel
-        type: string
-      invoice_no:
-        description: Invoice No
-        example: AS134412
-        type: string
-      is_recurring:
+      expires_in:
+        type: integer
+      is_admin:
         type: boolean
-      notes:
+      refresh_token:
         type: string
-      opening_stock_product_id:
-        description: Opening Stock Product ID
-        format: uuid
+      token_type:
         type: string
-      payment_status:
-        description: Payment Status
-        enum:
-        - paid
-        - due
-        - partial
-        example: paid
-        type: string
-      promo_amount:
-        description: Tax Amount
-        example: 10
-        type: number
-      promo_id:
-        description: Promo ID
-        format: uuid
-        type: string
-      promo_name:
-        description: Promo Amount
-        example: Weekend Special
-        type: string
-      promo_type:
-        description: Promo Amount
-        enum:
-        - fixed
-        - percentage
-        example: percentage
-        type: string
-      purchase_order:
-        items:
-          $ref: '#/definitions/model.TransactionPurchaseLine'
-        type: array
-      recur_interval:
-        type: integer
-      recur_repeat_on:
-        enum:
-        - Day
-        - Week
-        - Month
-        - Year
-        example: Day
-        type: string
-      recur_repetition:
-        type: integer
-      recur_stopped_on:
-        format: date-time
-        type: string
-      references_no:
-        description: References No
-        example: "11"
-        type: string
-      sell_line:
-        items:
-          $ref: '#/definitions/model.TransactionSellLine'
-        type: array
-      status_transaction:
-        description: Status Transaction
-        enum:
-        - draft
-        - waiting
-        - paid
-        - ordered
-        - ready_to_shipping
-        - shipping
-        - arrived
-        - received
-        - done
-        - pending
-        - cancel
-        - refuse
-        - expired
-        example: waiting
-        type: string
-      tax_amount:
-        description: Tax Amount
-        example: 10
-        type: number
-      tax_id:
-        description: Tax ID
-        format: uuid
-        type: string
-      tax_name:
-        description: Tax Amount
-        example: PPN 10%
-        type: string
-      total_pay:
-        description: Total Price
-        example: 50000
-        type: number
-      total_price:
-        description: Total Price
-        example: 50000
-        type: number
-      total_price_before:
-        description: Total Price Before
-        example: 1000
-        type: number
-      transaction_category_id:
-        description: Business Location ID
-        format: uuid
-        type: string
-      transaction_date:
-        description: Transaction Date
-        format: date-time
-        type: string
-      transaction_payment:
-        items:
-          $ref: '#/definitions/model.PaymentTransaction'
-        type: array
-      type:
-        description: Type
-        enum:
-        - opening_stock
-        - purchase
-        - sell
-        - income
-        - expense
-        - subscription
-        example: sell
-        type: string
-    required:
-    - payment_status
-    - status_transaction
-    - type
     type: object
-  model.TransactionAPI:
+  model.User:
     properties:
-      business_id:
-        description: Business ID
-        format: uuid
+      additional:
         type: string
-      business_location_id:
-        description: Business Location ID
-        format: uuid
+      email:
+        description: Email
+        example: armadamuhammads@gmail.com
         type: string
-      contact_id:
-        description: Contact ID
-        format: uuid
+      firstname:
+        description: FirstName
+        example: Armada
         type: string
-      contact_mobile:
-        example: "089123456789"
-        type: string
-      contact_name:
-        example: alan
-        type: string
-      flow:
-        description: Flow is filled by status transaction
-        example: draft|ordered|cancel
-        type: string
-      invoice_no:
-        description: Invoice No
-        example: AS134412
-        type: string
-      is_recurring:
+      isadmin:
+        description: IsAdmin
         type: boolean
-      notes:
-        type: string
-      opening_stock_product_id:
-        description: Opening Stock Product ID
-        format: uuid
-        type: string
-      payment_status:
-        description: Payment Status
-        enum:
-        - paid
-        - due
-        - partial
-        example: paid
-        type: string
-      promo_amount:
-        description: Tax Amount
-        example: 10
-        type: number
-      promo_id:
-        description: Promo ID
-        format: uuid
-        type: string
-      promo_name:
-        description: Promo Amount
-        example: Weekend Special
-        type: string
-      promo_type:
-        description: Promo Amount
-        enum:
-        - fixed
-        - percentage
-        example: percentage
-        type: string
-      recur_interval:
-        type: integer
-      recur_repeat_on:
-        enum:
-        - Day
-        - Week
-        - Month
-        - Year
-        example: Day
-        type: string
-      recur_repetition:
-        type: integer
-      recur_stopped_on:
+      isverified:
+        description: IsVerified
+        type: boolean
+      lastlogin:
+        description: LastLogin
         format: date-time
         type: string
-      references_no:
-        description: References No
-        example: "11"
+      lastname:
+        description: LastName
+        example: Muhammad Siswanto
         type: string
-      status_transaction:
-        description: Status Transaction
-        enum:
-        - draft
-        - waiting
-        - paid
-        - ordered
-        - ready_to_shipping
-        - shipping
-        - arrived
-        - received
-        - done
-        - pending
-        - cancel
-        - refuse
-        - expired
-        example: waiting
+      password:
+        description: Password
         type: string
-      tax_amount:
-        description: Tax Amount
-        example: 10
-        type: number
-      tax_id:
-        description: Tax ID
-        format: uuid
+      phonenumber:
+        description: PhoneNumber
+        example: "089678009400"
         type: string
-      tax_name:
-        description: Tax Amount
-        example: PPN 10%
+      username:
+        description: Username
         type: string
-      total_pay:
-        description: Total Price
-        example: 50000
-        type: number
-      total_price:
-        description: Total Price
-        example: 50000
-        type: number
-      total_price_before:
-        description: Total Price Before
-        example: 1000
-        type: number
-      transaction_category_id:
-        description: Business Location ID
-        format: uuid
+      verificationcode:
+        description: VerificationCode
+        example: "2024"
         type: string
-      transaction_date:
-        description: Transaction Date
+    type: object
+  model.UserAPI:
+    properties:
+      email:
+        description: Email
+        example: armadamuhammads@gmail.com
+        type: string
+      firstname:
+        description: FirstName
+        example: Armada
+        type: string
+      isadmin:
+        description: IsAdmin
+        type: boolean
+      isverified:
+        description: IsVerified
+        type: boolean
+      lastlogin:
+        description: LastLogin
         format: date-time
         type: string
-      type:
-        description: Type
-        enum:
-        - opening_stock
-        - purchase
-        - sell
-        - income
-        - expense
-        - subscription
-        example: sell
+      lastname:
+        description: LastName
+        example: Muhammad Siswanto
         type: string
-    required:
-    - payment_status
-    - status_transaction
-    - type
+      password:
+        description: Password
+        type: string
+      phonenumber:
+        description: PhoneNumber
+        example: "089678009400"
+        type: string
+      username:
+        description: Username
+        type: string
+      verificationcode:
+        description: VerificationCode
+        example: "2024"
+        type: string
     type: object
-  model.TransactionIncomeAPI:
-    properties:
-      payment:
-        $ref: '#/definitions/model.PaymentTransactionAPI'
-      transaction:
-        $ref: '#/definitions/model.TransactionAPI'
-    type: object
-  model.TransactionIncomeResponse:
-    properties:
-      payment:
-        $ref: '#/definitions/model.PaymentTransaction'
-      transaction:
-        $ref: '#/definitions/model.Transaction'
-    type: object
-  model.TransactionPurchaseLine:
-    properties:
-      additional:
-        type: string
-      product_id:
-        description: ProductID ID
-        format: uuid
-        type: string
-      product_name:
-        description: Product Name
-        example: Samsung
-        type: string
-      promo_amount:
-        description: Tax Amount
-        example: 10
-        type: number
-      promo_name:
-        description: Promo Name
-        example: Promo akhir bulan
-        type: string
-      promo_type:
-        description: 'Promo Type (e.g : ''fixed'', ''percentage'')'
-        example: fixed
-        type: string
-      qty:
-        description: Qty
-        type: integer
-      stock_id:
-        format: uuid
-        type: string
-      sub_unit_price:
-        type: number
-      tax_amount:
-        description: Tax Amount
-        example: 10
-        type: number
-      tax_name:
-        description: Tax Name
-        example: Ppn 10%
-        type: string
-      transaction_id:
-        description: Transaction ID
-        format: uuid
-        type: string
-      type:
-        description: 'Type (e.g : ''custom'',''single'',''variation'')'
-        type: string
-      unit_price:
-        description: Unit Price
-        example: 5000
-        type: number
-      unit_price_before:
-        description: Unit Price Before
-        example: 5000
-        type: number
-    type: object
-  model.TransactionPurchaseLineAPI:
-    properties:
-      product_id:
-        description: ProductID ID
-        format: uuid
-        type: string
-      product_name:
-        description: Product Name
-        example: Samsung
-        type: string
-      promo_amount:
-        description: Tax Amount
-        example: 10
-        type: number
-      promo_name:
-        description: Promo Name
-        example: Promo akhir bulan
-        type: string
-      promo_type:
-        description: 'Promo Type (e.g : ''fixed'', ''percentage'')'
-        example: fixed
-        type: string
-      qty:
-        description: Qty
-        type: integer
-      stock_id:
-        format: uuid
-        type: string
-      sub_unit_price:
-        type: number
-      tax_amount:
-        description: Tax Amount
-        example: 10
-        type: number
-      tax_name:
-        description: Tax Name
-        example: Ppn 10%
-        type: string
-      transaction_id:
-        description: Transaction ID
-        format: uuid
-        type: string
-      type:
-        description: 'Type (e.g : ''custom'',''single'',''variation'')'
-        type: string
-      unit_price:
-        description: Unit Price
-        example: 5000
-        type: number
-      unit_price_before:
-        description: Unit Price Before
-        example: 5000
-        type: number
-    type: object
-  model.TransactionPurchaseLinePayload:
-    properties:
-      created_at:
-        format: date-time
-        type: string
-      detail:
-        items:
-          $ref: '#/definitions/model.TransactionPurchaseLineAPI'
-        type: array
-      payment:
-        $ref: '#/definitions/model.PaymentTransactionAPI'
-      transaction:
-        $ref: '#/definitions/model.TransactionAPI'
-    type: object
-  model.TransactionPurchaseLineResponse:
-    properties:
-      detail:
-        items:
-          $ref: '#/definitions/model.TransactionPurchaseLine'
-        type: array
-      payment:
-        $ref: '#/definitions/model.PaymentTransaction'
-      transaction:
-        $ref: '#/definitions/model.Transaction'
-    type: object
-  model.TransactionSellLine:
-    properties:
-      additional:
-        type: string
-      product_id:
-        description: ProductID ID
-        format: uuid
-        type: string
-      product_name:
-        description: Product Name
-        example: Samsung
-        type: string
-      promo_amount:
-        example: 10
-        type: number
-      promo_name:
-        description: PromoID         *uuid.UUID `json:"promo_id,omitempty" swaggertype:"string"
-          format:"uuid"` // Promo ID
-        example: "10"
-        type: string
-      promo_type:
-        description: Promo Amount
-        example: "10"
-        type: string
-      qty:
-        description: Qty
-        type: integer
-      stock_id:
-        format: uuid
-        type: string
-      tax_amount:
-        type: number
-      tax_id:
-        format: uuid
-        type: string
-      tax_name:
-        type: string
-      transaction_id:
-        description: Transaction ID
-        format: uuid
-        type: string
-      unit_price:
-        type: number
-      unit_price_before:
-        type: number
-    type: object
-  model.TransactionSellLineAPI:
-    properties:
-      product_id:
-        description: ProductID ID
-        format: uuid
-        type: string
-      product_name:
-        description: Product Name
-        example: Samsung
-        type: string
-      promo_amount:
-        example: 10
-        type: number
-      promo_name:
-        description: PromoID         *uuid.UUID `json:"promo_id,omitempty" swaggertype:"string"
-          format:"uuid"` // Promo ID
-        example: "10"
-        type: string
-      promo_type:
-        description: Promo Amount
-        example: "10"
-        type: string
-      qty:
-        description: Qty
-        type: integer
-      stock_id:
-        format: uuid
-        type: string
-      tax_amount:
-        type: number
-      tax_id:
-        format: uuid
-        type: string
-      tax_name:
-        type: string
-      transaction_id:
-        description: Transaction ID
-        format: uuid
-        type: string
-      unit_price:
-        type: number
-      unit_price_before:
-        type: number
-    type: object
-  model.TransactionSellLinePayload:
-    properties:
-      detail:
-        items:
-          $ref: '#/definitions/model.TransactionSellLineAPI'
-        type: array
-      payment:
-        $ref: '#/definitions/model.PaymentTransactionAPI'
-      transaction:
-        $ref: '#/definitions/model.TransactionAPI'
-    type: object
-  model.TransactionSellLineResponse:
-    properties:
-      detail:
-        items:
-          $ref: '#/definitions/model.TransactionSellLine'
-        type: array
-      payment_status:
-        type: string
-      transaction:
-        $ref: '#/definitions/model.Transaction'
-    type: object
-  model.TransactionUpdate:
-    properties:
-      payment:
-        $ref: '#/definitions/model.PaymentTransactionAPI'
-      purchase:
-        items:
-          $ref: '#/definitions/model.TransactionPurchaseLine'
-        type: array
-      sell:
-        items:
-          $ref: '#/definitions/model.TransactionSellLine'
-        type: array
-      transaction:
-        $ref: '#/definitions/model.TransactionAPI'
-    type: object
-host: kasirdev.monstercode.net
+host: localhost:8000
 info:
   contact:
-    email: developer@mail.com
-    name: Developer
+    email: armadamuhammads@gmail.com
+    name: Armada Muhammad Siswanto
   description: API Documentation
-  termsOfService: https://dospecs.monstercode.net/en/guide/tnc.html
-  title: Transaction Services
+  title: Synapsis E-Commerce
   version: 1.0.0
 paths:
   /:
@@ -781,6 +340,562 @@ paths:
       summary: show basic response
       tags:
       - API
+  /accounts/login:
+    post:
+      consumes:
+      - application/json
+      description: Login into Account
+      parameters:
+      - description: Account data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.LoginAPI'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Account data
+          schema:
+            $ref: '#/definitions/model.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - TokenKey: []
+      summary: Login into Account
+      tags:
+      - Account
+  /accounts/register:
+    post:
+      consumes:
+      - application/json
+      description: Register new Account
+      parameters:
+      - description: Account data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.RegistrationAPI'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - TokenKey: []
+      summary: Register new Account
+      tags:
+      - Account
+  /carts:
+    get:
+      consumes:
+      - application/json
+      description: List of Cart
+      parameters:
+      - description: Page number start from zero
+        in: query
+        name: page
+        type: integer
+      - description: Size per page, default `0`
+        in: query
+        name: size
+        type: integer
+      - description: Sort by field, adding dash (`-`) at the beginning means descending
+          and vice versa
+        in: query
+        name: sort
+        type: string
+      - description: Select specific fields with comma separated
+        in: query
+        name: fields
+        type: string
+      - description: custom filters, see [more details](https://github.com/morkid/paginate#filter-format)
+        in: query
+        name: filters
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of Cart
+          schema:
+            allOf:
+            - $ref: '#/definitions/lib.Page'
+            - properties:
+                items:
+                  items:
+                    $ref: '#/definitions/model.Cart'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: List of Cart
+      tags:
+      - Cart
+    post:
+      consumes:
+      - application/json
+      description: Create new Cart
+      parameters:
+      - description: Cart data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.CartAPI'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Cart data
+          schema:
+            $ref: '#/definitions/model.Cart'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create new Cart
+      tags:
+      - Cart
+  /carts/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Cart by id
+      parameters:
+      - description: Cart ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Cart by id
+      tags:
+      - Cart
+    get:
+      consumes:
+      - application/json
+      description: Get a Cart by id
+      parameters:
+      - description: Cart ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Cart data
+          schema:
+            $ref: '#/definitions/model.Cart'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a Cart by id
+      tags:
+      - Cart
+    put:
+      consumes:
+      - application/json
+      description: Update Cart by id
+      parameters:
+      - description: Cart ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Cart data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.CartAPI'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Cart data
+          schema:
+            $ref: '#/definitions/model.Cart'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Cart by id
+      tags:
+      - Cart
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: List of Category
+      parameters:
+      - description: Page number start from zero
+        in: query
+        name: page
+        type: integer
+      - description: Size per page, default `0`
+        in: query
+        name: size
+        type: integer
+      - description: Sort by field, adding dash (`-`) at the beginning means descending
+          and vice versa
+        in: query
+        name: sort
+        type: string
+      - description: Select specific fields with comma separated
+        in: query
+        name: fields
+        type: string
+      - description: custom filters, see [more details](https://github.com/morkid/paginate#filter-format)
+        in: query
+        name: filters
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of Category
+          schema:
+            allOf:
+            - $ref: '#/definitions/lib.Page'
+            - properties:
+                items:
+                  items:
+                    $ref: '#/definitions/model.Category'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: List of Category
+      tags:
+      - Category
+    post:
+      consumes:
+      - application/json
+      description: Create new Category
+      parameters:
+      - description: Category data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.CategoryAPI'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Category data
+          schema:
+            $ref: '#/definitions/model.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create new Category
+      tags:
+      - Category
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete Category by id
+      tags:
+      - Category
+    get:
+      consumes:
+      - application/json
+      description: Get a Category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category data
+          schema:
+            $ref: '#/definitions/model.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a Category by id
+      tags:
+      - Category
+    put:
+      consumes:
+      - application/json
+      description: Update Category by id
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Category data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.CategoryAPI'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Category data
+          schema:
+            $ref: '#/definitions/model.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update Category by id
+      tags:
+      - Category
   /info.json:
     get:
       consumes:
@@ -813,11 +928,11 @@ paths:
       summary: show info response
       tags:
       - API
-  /transactions:
+  /products:
     get:
       consumes:
       - application/json
-      description: List of Transaction
+      description: List of Product
       parameters:
       - description: Page number start from zero
         in: query
@@ -844,14 +959,14 @@ paths:
       - application/json
       responses:
         "200":
-          description: List of Transaction
+          description: List of Product
           schema:
             allOf:
             - $ref: '#/definitions/lib.Page'
             - properties:
                 items:
                   items:
-                    $ref: '#/definitions/model.Transaction'
+                    $ref: '#/definitions/model.Product'
                   type: array
               type: object
         "400":
@@ -872,110 +987,27 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: List of Transaction
+      summary: List of Product
       tags:
-      - Transaction
-  /transactions/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get a Transaction by id
-      parameters:
-      - description: Transaction ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Transaction data
-          schema:
-            $ref: '#/definitions/model.Transaction'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Get a Transaction by id
-      tags:
-      - Transaction
-  /transactions/{id}/payment:
-    get:
-      consumes:
-      - application/json
-      description: Get a Transaction Payemnt by transaction id
-      parameters:
-      - description: Transaction ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Transaction data
-          schema:
-            $ref: '#/definitions/model.Transaction'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Get a Transaction Payemnt by transaction id
-      tags:
-      - TransactionPayment
+      - Product
     post:
       consumes:
       - application/json
-      description: Create new Transaction Sell Line
+      description: Create new Product
       parameters:
-      - description: Transaction ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Transaction data
+      - description: Product data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PaymentTransactionAPI'
+          $ref: '#/definitions/model.ProductAPI'
       produces:
       - application/json
       responses:
         "201":
-          description: Transaction data
+          description: Product data
           schema:
-            $ref: '#/definitions/model.PaymentTransaction'
+            $ref: '#/definitions/model.Product'
         "400":
           description: Bad Request
           schema:
@@ -998,67 +1030,18 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Create new Transaction Sell Line
+      summary: Create new Product
       tags:
-      - TransactionPayment
-  /transactions/{id}/payment/{payment_id}:
-    get:
+      - Product
+  /products/{id}:
+    delete:
       consumes:
       - application/json
-      description: Get a  single Transaction Payment by id
+      description: Delete Product by id
       parameters:
-      - description: Transaction ID
+      - description: Product ID
         in: path
         name: id
-        required: true
-        type: string
-      - description: Payment ID
-        in: path
-        name: payment_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Transaction Payment data
-          schema:
-            $ref: '#/definitions/model.PaymentTransaction'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Get a  single Transaction Payment by id
-      tags:
-      - TransactionPayment
-  /transactions/{id}/status/{status}:
-    post:
-      consumes:
-      - application/json
-      description: Update Transaction Status by ID
-      parameters:
-      - description: Transaction ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Status Transaction
-        in: path
-        name: status
         required: true
         type: string
       produces:
@@ -1090,22 +1073,15 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Update Transaction Status by ID
+      summary: Delete Product by id
       tags:
-      - Transaction
-  /transactions/{id}/update:
-    put:
+      - Product
+    get:
       consumes:
       - application/json
-      description: Update Transaction Draft
+      description: Get a Product by id
       parameters:
-      - description: Transaction data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.TransactionUpdate'
-      - description: Transaction ID
+      - description: Product ID
         in: path
         name: id
         required: true
@@ -1113,20 +1089,16 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Transaction data
+        "200":
+          description: Product data
           schema:
-            $ref: '#/definitions/model.Transaction'
+            $ref: '#/definitions/model.Product'
         "400":
           description: Bad Request
           schema:
             $ref: '#/definitions/lib.Response'
         "404":
           description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "409":
-          description: Conflict
           schema:
             $ref: '#/definitions/lib.Response'
         "500":
@@ -1139,28 +1111,32 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Update Transaction Draft
+      summary: Get a Product by id
       tags:
-      - Transaction
-  /transactions/expense:
-    post:
+      - Product
+    put:
       consumes:
       - application/json
-      description: Create new Transaction Expense
+      description: Update Product by id
       parameters:
-      - description: Transaction data
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.TransactionIncomeAPI'
+          $ref: '#/definitions/model.ProductAPI'
       produces:
       - application/json
       responses:
-        "201":
-          description: Transaction data
+        "200":
+          description: Product data
           schema:
-            $ref: '#/definitions/model.TransactionIncomeResponse'
+            $ref: '#/definitions/model.Product'
         "400":
           description: Bad Request
           schema:
@@ -1183,28 +1159,89 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Create new Transaction Expense
+      summary: Update Product by id
       tags:
-      - Transaction
-  /transactions/income:
+      - Product
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: List of User
+      parameters:
+      - description: Page number start from zero
+        in: query
+        name: page
+        type: integer
+      - description: Size per page, default `0`
+        in: query
+        name: size
+        type: integer
+      - description: Sort by field, adding dash (`-`) at the beginning means descending
+          and vice versa
+        in: query
+        name: sort
+        type: string
+      - description: Select specific fields with comma separated
+        in: query
+        name: fields
+        type: string
+      - description: custom filters, see [more details](https://github.com/morkid/paginate#filter-format)
+        in: query
+        name: filters
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of User
+          schema:
+            allOf:
+            - $ref: '#/definitions/lib.Page'
+            - properties:
+                items:
+                  items:
+                    $ref: '#/definitions/model.User'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: List of User
+      tags:
+      - User
     post:
       consumes:
       - application/json
-      description: Create new Transaction Income
+      description: Create new User
       parameters:
-      - description: Transaction data
+      - description: User data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.TransactionIncomeAPI'
+          $ref: '#/definitions/model.UserAPI'
       produces:
       - application/json
       responses:
         "201":
-          description: Transaction data
+          description: User data
           schema:
-            $ref: '#/definitions/model.TransactionIncomeResponse'
+            $ref: '#/definitions/model.User'
         "400":
           description: Bad Request
           schema:
@@ -1227,28 +1264,71 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Create new Transaction Income
+      summary: Create new User
       tags:
-      - Transaction
-  /transactions/purchase-line:
-    post:
+      - User
+  /users/{id}:
+    get:
       consumes:
       - application/json
-      description: Create new Transaction Purchase Line
+      description: Get a User by id
       parameters:
-      - description: Transaction data
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User data
+          schema:
+            $ref: '#/definitions/model.User'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/lib.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/lib.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/lib.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a User by id
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: Update User by id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.TransactionPurchaseLinePayload'
+          $ref: '#/definitions/model.UserAPI'
       produces:
       - application/json
       responses:
-        "201":
-          description: Transaction data
+        "200":
+          description: User data
           schema:
-            $ref: '#/definitions/model.TransactionPurchaseLineResponse'
+            $ref: '#/definitions/model.User'
         "400":
           description: Bad Request
           schema:
@@ -1271,55 +1351,11 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Create new Transaction Purchase Line
+      summary: Update User by id
       tags:
-      - Transaction
-  /transactions/sell-line:
-    post:
-      consumes:
-      - application/json
-      description: Create new Transaction Sell Line
-      parameters:
-      - description: Transaction data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.TransactionSellLinePayload'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Transaction data
-          schema:
-            $ref: '#/definitions/model.TransactionSellLineResponse'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Create new Transaction Sell Line
-      tags:
-      - Transaction
+      - User
 schemes:
-- https
+- http
 securityDefinitions:
   ApiKeyAuth:
     in: header

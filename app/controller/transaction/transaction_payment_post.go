@@ -16,6 +16,13 @@ func PostTransactionPayment(c *fiber.Ctx) error {
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)
 	}
+
+	trx := model.Transaction{}
+	db.Where(`id = ?`).Take(&trx)
+	if lib.RevStr(trx.TransactionStatus) == "paid" || lib.RevStr(trx.TransactionStatus) == "cancelled" {
+		return lib.ErrorNotAllowed(c)
+	}
+
 	var data model.TransactionPayment
 	lib.Merge(api, &data)
 	data.TransactionID = lib.StringToUUID(id)
@@ -26,9 +33,6 @@ func PostTransactionPayment(c *fiber.Ctx) error {
 
 	amount := float64(0)
 	db.Model(&model.TransactionPayment{}).Select(`sum(paid_amount) as amount`).Where(`transaction_id = ?`, id).Find(&amount)
-
-	trx := model.Transaction{}
-	db.Where(`id = ?`).Take(&trx)
 
 	if amount >= lib.RevFloat64(trx.TotalPrice) {
 		trx.TransactionStatus = lib.Strptr("paid")

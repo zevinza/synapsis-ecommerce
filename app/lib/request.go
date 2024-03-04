@@ -2,6 +2,7 @@ package lib
 
 import (
 	"api/app/model"
+	"encoding/json"
 	"io"
 	"net/http"
 	"regexp"
@@ -75,23 +76,46 @@ func ClaimsJWT(accesToken *string) (jwt.MapClaims, error) {
 
 // GetXUserID provide user id from the authentication token
 func GetXUserID(c *fiber.Ctx) *uuid.UUID {
-	authData, ok := c.Locals("auth").(model.ResponseAuthenticate)
-	if ok && authData.UserID != nil {
-		return StringToUUID(*authData.UserID)
+	authData := c.Locals("auth").(jwt.MapClaims)
+	if authData == nil {
+		return nil
 	}
-	return nil
+
+	js, err := json.Marshal(authData)
+	if nil != err {
+		return nil
+	}
+
+	auth := model.Auth{}
+	err = json.Unmarshal(js, &auth)
+	if err != nil {
+		return nil
+	}
+
+	return auth.UserID
 }
 
-// GetXBusinessID retrieves the business ID from the authentication token
-func GetXBusinessID(c *fiber.Ctx) *uuid.UUID {
-	authData, ok := c.Locals("auth").(model.ResponseAuthenticate)
-	if ok && authData.Access != nil {
-		claims, _ := ClaimsJWT(authData.Access)
-		businessIDStr, _ := claims["business_id"].(string)
-		businessID, _ := uuid.Parse(businessIDStr)
-		return &businessID
+func GetXIsAdmin(c *fiber.Ctx) bool {
+	authData := c.Locals("auth").(jwt.MapClaims)
+	if authData == nil {
+		return false
 	}
-	return nil
+
+	js, err := json.Marshal(authData)
+	if nil != err {
+		return false
+	}
+
+	auth := model.Auth{}
+	err = json.Unmarshal(js, &auth)
+	if err != nil {
+		return false
+	}
+
+	if auth.IsAdmin != nil {
+		return *auth.IsAdmin
+	}
+	return false
 }
 
 // BodyParser with validation

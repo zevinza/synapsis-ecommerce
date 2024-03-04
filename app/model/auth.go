@@ -1,55 +1,66 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 // LoginAPI model
 type LoginAPI struct {
-	Username *string `json:"username,omitempty" example:"john.doe@mail.com" validate:"required"`
+	Username *string `json:"username,omitempty" example:"armadamuhammads@gmail.com" validate:"required"`
 	Password *string `json:"password,omitempty" example:"@Password123" validate:"required"`
 	Remember *bool   `json:"remember,omitempty" example:"true"`
 }
 
 // RegistrationAPI model
 type RegistrationAPI struct {
-	Fullname        *string `json:"fullname,omitempty" example:"John doe" validate:"required"`
-	Email           *string `json:"email,omitempty" example:"john.doe@mail.com" validate:"required,email"`
-	Password        *string `json:"password,omitempty" example:"@Password123" validate:"required,min=8,regex=^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"`
+	FirstName       *string `json:"first_name,omitempty" example:"Armada" validate:"required"`
+	LastName        *string `json:"last_name,omitempty" example:"Muhammad"`
+	Email           *string `json:"email,omitempty" example:"armadamuhammads@gmail.com" validate:"required,email"`
+	Username        *string `json:"username,omitempty" example:"armadamuhammads"`
+	PhoneNumber     *string `json:"phone_number,omitempty" example:"089678009400"`
+	Password        *string `json:"password,omitempty" example:"@Password123" validate:"required,min=8"`
 	ConfirmPassword *string `json:"confirm_password,omitempty" example:"@Password123" validate:"required,eqfield=Password"`
-	RefferalCode    *string `json:"refferal_code,omitempty" example:"E6So5no5" validate:"required"`
 }
 
 // VerificationAccountAPI model
 type VerificationAccountAPI struct {
-	Email            *string `json:"email,omitempty" example:"john.doe@mail.com" validate:"required"`
+	Email            *string `json:"email,omitempty" example:"armadamuhammads@gmail.com" validate:"required"`
 	VerificationCode *string `json:"verification_code,omitempty" example:"7085" validate:"required"`
 }
 
 // LoginResponse model
 type LoginResponse struct {
-	Token    *ResponseToken `json:"token,omitempty"`
-	Business *Business      `json:"business,omitempty"`
-	User     *User          `json:"user,omitempty"`
+	Token *ResponseToken `json:"token,omitempty"`
+	User  *User          `json:"user,omitempty"`
 }
 
 // RegistrationResponse model
 type RegistrationResponse struct {
-	Business *Business `json:"business,omitempty"`
-	User     *User     `json:"user,omitempty"`
+	User *User `json:"user,omitempty"`
 }
 
 // ResponseToken model
 type ResponseToken struct {
 	AccessToken  *string `json:"access_token,omitempty"`
-	ExpiresIn    *int    `json:"expires_in,omitempty"`
+	ExpiresIn    *int64  `json:"expires_in,omitempty"`
 	RefreshToken *string `json:"refresh_token,omitempty"`
-	Scope        *string `json:"scope,omitempty"`
 	TokenType    *string `json:"token_type,omitempty"`
+	IsAdmin      *bool   `json:"is_admin,omitempty"`
+}
+
+type Auth struct {
+	UserID  *uuid.UUID `json:"user_id,omitempty"`
+	IsAdmin *bool      `json:"is_admin,omitempty"`
+	Exp     *int64     `json:"exp,omitempty"`
 }
 
 // ResponseAuthenticate model
 type ResponseAuthenticate struct {
 	ClientID            *string    `json:"ClientID,omitempty"`
 	UserID              *string    `json:"UserID,omitempty"`
+	IsAdmin             *bool      `json:"IsAdmin,omitempty"`
 	RedirectURI         *string    `json:"RedirectURI,omitempty"`
 	Scope               *string    `json:"Scope,omitempty"`
 	Code                *string    `json:"Code,omitempty"`

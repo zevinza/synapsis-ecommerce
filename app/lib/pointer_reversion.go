@@ -11,7 +11,15 @@ func RevStr(s *string) string {
 	if nil == s {
 		return ""
 	}
+
 	return *s
+}
+
+func RevBool(b *bool) bool {
+	if b == nil {
+		return false
+	}
+	return *b
 }
 
 func RevFloat64(f *float64) float64 {

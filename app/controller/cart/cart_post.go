@@ -11,7 +11,7 @@ import (
 // PostCart godoc
 // @Summary Create new Cart
 // @Description Create new Cart
-// @Param data body model.CartAPI true "Cart data"
+// @Param data body model.CartPayload true "Cart data"
 // @Accept  application/json
 // @Produce application/json
 // @Success 201 {object} model.Cart "Cart data"
@@ -20,13 +20,13 @@ import (
 // @Failure 409 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
-// @Security TokenKey
+// @Security ApiKeyAuth
 // @Router /carts [post]
 // @Tags Cart
 func PostCart(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext())
 
-	api := new(model.CartAPI)
+	api := new(model.CartPayload)
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)
 	}

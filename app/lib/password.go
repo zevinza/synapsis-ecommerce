@@ -1,6 +1,9 @@
 package lib
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/spf13/viper"
+	"golang.org/x/crypto/bcrypt"
+)
 
 // PasswordEncrypt Password Encrypt
 func PasswordEncrypt(plain, salt, key string, cost ...int) string {
@@ -21,4 +24,8 @@ func PasswordEncrypt(plain, salt, key string, cost ...int) string {
 func PasswordCompare(encrypted, plain, salt, key string) bool {
 	password := plain + "//" + salt + "//" + key
 	return nil == bcrypt.CompareHashAndPassword([]byte(encrypted), []byte(password))
+}
+
+func GenPassword(str string) string {
+	return PasswordEncrypt(str, viper.GetString("SALT"), viper.GetString("AES"))
 }
