@@ -34,6 +34,7 @@ func GetCartID(c *fiber.Ctx) error {
 				ID: &id,
 			},
 		})).
+		Joins("Product").
 		Take(&data)
 	if result.RowsAffected < 1 {
 		return lib.ErrorNotFound(c)

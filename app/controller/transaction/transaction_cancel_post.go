@@ -2,10 +2,38 @@ package transaction
 
 import (
 	"api/app/lib"
+	"api/app/model"
+	"api/app/services"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 )
 
 func PostTransactionCancel(c *fiber.Ctx) error {
-	return lib.OK(c)
+	db := services.DB.WithContext(c.UserContext())
+	id, _ := uuid.Parse(c.Params("id"))
+
+	var data model.Transaction
+	result := db.Model(&data).
+		Where(db.Where(model.Transaction{
+			Base: model.Base{
+				ID: &id,
+			},
+		})).
+		Take(&data)
+	if result.RowsAffected < 1 {
+		return lib.ErrorNotFound(c)
+	}
+
+	var countPayment int64
+	db.Model(&model.TransactionPayment{}).Where(`transaction_id = ?`, id).Count(&countPayment)
+	if countPayment > 0 {
+		lib.ErrorNotAllowed(c)
+	}
+
+	if err := db.Model(&data).UpdateColumn("transaction_status", "cancelled").Error; err != nil {
+		return lib.ErrorConflict(c)
+	}
+
+	return lib.OK(c, data)
 }

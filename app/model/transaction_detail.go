@@ -6,6 +6,8 @@ type TransactionDetail struct {
 	Base
 	DataOwner
 	TransactionDetailAPI
+	Product     *Product     `json:"product,omitempty" gorm:"foreignKey:ID;references:ProductID"`
+	Transaction *Transaction `json:"transaction,omitempty" gorm:"foreignKey:ID;references:TransactionID"`
 }
 type TransactionDetailAPI struct {
 	TransactionID      *uuid.UUID `json:"transaction_id,omitempty" swaggertype:"string" format:"uuid"`

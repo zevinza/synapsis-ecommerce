@@ -26,6 +26,9 @@ import (
 // @Router /products/{id} [put]
 // @Tags Product
 func PutProduct(c *fiber.Ctx) error {
+	if !lib.GetXIsAdmin(c) {
+		return lib.ErrorUnauthorized(c)
+	}
 	api := new(model.ProductAPI)
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)

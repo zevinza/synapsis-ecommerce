@@ -9,6 +9,7 @@ type TransactionPayment struct {
 	Base
 	DataOwner
 	TransactionPaymentAPI
+	Transaction *Transaction `json:"transaction,omitempty" gorm:"foreignKey:ID;references:TransactionID"`
 }
 
 type TransactionPaymentAPI struct {

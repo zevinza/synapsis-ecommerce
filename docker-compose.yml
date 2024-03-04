@@ -6,7 +6,7 @@ networks:
 volumes:
   goroot: {}
   gocache: {}
-  kasirdata: {}
+  pgdata: {}
 
 services:
   go:
@@ -43,7 +43,7 @@ services:
   postgres:
     image: postgres:9.5
     volumes:
-      - kasirdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     environment:
       - TZ=UTC
       - POSTGRES_USER=postgres

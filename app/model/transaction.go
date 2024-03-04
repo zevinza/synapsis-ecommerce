@@ -6,8 +6,8 @@ type Transaction struct {
 	Base
 	DataOwner
 	TransactionAPI
-	Payments *[]TransactionPayment `json:"payments,omitempty"`
-	Details  *[]TransactionDetail  `json:"details,omitempty"`
+	Payments *[]TransactionPayment `json:"payments,omitempty" gorm:"foreignKey:TransactionID;references:ID"`
+	Details  *[]TransactionDetail  `json:"details,omitempty" gorm:"foreignKey:TransactionID;references:ID"`
 }
 
 type TransactionAPI struct {

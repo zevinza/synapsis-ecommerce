@@ -65,6 +65,7 @@ func Handle(app *fiber.App) {
 	productAPI.Use(middleware.Oauth2Authentication)
 	productAPI.Post("/", product.PostProduct)
 	productAPI.Get("/", product.GetProduct)
+	productAPI.Get("/category/:id", product.GetProductCategory)
 	productAPI.Put("/:id", product.PutProduct)
 	productAPI.Get("/:id", product.GetProductID)
 	productAPI.Delete("/:id", product.DeleteProduct)

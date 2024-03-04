@@ -24,6 +24,9 @@ import (
 // @Router /categories [post]
 // @Tags Category
 func PostCategory(c *fiber.Ctx) error {
+	if !lib.GetXIsAdmin(c) {
+		return lib.ErrorUnauthorized(c)
+	}
 	api := new(model.CategoryAPI)
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)
