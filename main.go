@@ -17,15 +17,14 @@ func init() {
 	services.InitRedis()
 }
 
-// @title Transaction Services
+// @title Synapsis E-Commerce
 // @version 1.0.0
 // @description API Documentation
-// @termsOfService https://dospecs.monstercode.net/en/guide/tnc.html
-// @contact.name Developer
-// @contact.email developer@mail.com
-// @host kasirdev.monstercode.net
-// @schemes https
-// @BasePath /api/v1/transaction
+// @contact.name Armada Muhammad Siswanto
+// @contact.email armadamuhammads@gmail.com
+// @host localhost:8000
+// @schemes http
+// @BasePath /api/v1
 // @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization

@@ -1,20 +1,19 @@
 {
     "schemes": [
-        "https"
+        "http"
     ],
     "swagger": "2.0",
     "info": {
         "description": "API Documentation",
-        "title": "Transaction Services",
-        "termsOfService": "https://dospecs.monstercode.net/en/guide/tnc.html",
+        "title": "Synapsis E-Commerce",
         "contact": {
-            "name": "Developer",
-            "email": "developer@mail.com"
+            "name": "Armada Muhammad Siswanto",
+            "email": "armadamuhammads@gmail.com"
         },
         "version": "1.0.0"
     },
-    "host": "kasirdev.monstercode.net",
-    "basePath": "/api/v1/transaction",
+    "host": "localhost:8000",
+    "basePath": "/api/v1",
     "paths": {
         "/": {
             "get": {
@@ -56,6 +55,876 @@
                     },
                     "500": {
                         "description": "internal error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/login": {
+            "post": {
+                "security": [
+                    {
+                        "TokenKey": []
+                    }
+                ],
+                "description": "Login into Account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Login into Account",
+                "parameters": [
+                    {
+                        "description": "Account data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Account data",
+                        "schema": {
+                            "$ref": "#/definitions/model.LoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/accounts/register": {
+            "post": {
+                "security": [
+                    {
+                        "TokenKey": []
+                    }
+                ],
+                "description": "Register new Account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Register new Account",
+                "parameters": [
+                    {
+                        "description": "Account data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.RegistrationAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/carts": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List of Cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "List of Cart",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number start from zero",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size per page, default `0`",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by field, adding dash (`-`) at the beginning means descending and vice versa",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Select specific fields with comma separated",
+                        "name": "fields",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "custom filters, see [more details](https://github.com/morkid/paginate#filter-format)",
+                        "name": "filters",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of Cart",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/lib.Page"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Cart"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new Cart",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Create new Cart",
+                "parameters": [
+                    {
+                        "description": "Cart data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CartAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Cart data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Cart"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/carts/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a Cart by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Get a Cart by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Cart ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cart data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Cart"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update Cart by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Update Cart by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Cart ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Cart data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CartAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Cart data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Cart"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete Cart by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Delete Cart by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Cart ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List of Category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "List of Category",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number start from zero",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size per page, default `0`",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by field, adding dash (`-`) at the beginning means descending and vice versa",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Select specific fields with comma separated",
+                        "name": "fields",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "custom filters, see [more details](https://github.com/morkid/paginate#filter-format)",
+                        "name": "filters",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of Category",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/lib.Page"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Category"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new Category",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Create new Category",
+                "parameters": [
+                    {
+                        "description": "Category data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CategoryAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Category data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/categories/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a Category by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Get a Category by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update Category by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Update Category by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Category data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.CategoryAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Category data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Category"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete Category by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Category"
+                ],
+                "summary": "Delete Category by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
                         "schema": {
                             "$ref": "#/definitions/lib.Response"
                         }
@@ -111,14 +980,14 @@
                 }
             }
         },
-        "/transactions": {
+        "/products": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "List of Transaction",
+                "description": "List of Product",
                 "consumes": [
                     "application/json"
                 ],
@@ -126,9 +995,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Transaction"
+                    "Product"
                 ],
-                "summary": "List of Transaction",
+                "summary": "List of Product",
                 "parameters": [
                     {
                         "type": "integer",
@@ -163,7 +1032,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of Transaction",
+                        "description": "List of Product",
                         "schema": {
                             "allOf": [
                                 {
@@ -175,410 +1044,12 @@
                                         "items": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/model.Transaction"
+                                                "$ref": "#/definitions/model.Product"
                                             }
                                         }
                                     }
                                 }
                             ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/expense": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Create new Transaction Expense",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Transaction"
-                ],
-                "summary": "Create new Transaction Expense",
-                "parameters": [
-                    {
-                        "description": "Transaction data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionIncomeAPI"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Transaction data",
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionIncomeResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/income": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Create new Transaction Income",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Transaction"
-                ],
-                "summary": "Create new Transaction Income",
-                "parameters": [
-                    {
-                        "description": "Transaction data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionIncomeAPI"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Transaction data",
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionIncomeResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/purchase-line": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Create new Transaction Purchase Line",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Transaction"
-                ],
-                "summary": "Create new Transaction Purchase Line",
-                "parameters": [
-                    {
-                        "description": "Transaction data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionPurchaseLinePayload"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Transaction data",
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionPurchaseLineResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/sell-line": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Create new Transaction Sell Line",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Transaction"
-                ],
-                "summary": "Create new Transaction Sell Line",
-                "parameters": [
-                    {
-                        "description": "Transaction data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionSellLinePayload"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Transaction data",
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionSellLineResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get a Transaction by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Transaction"
-                ],
-                "summary": "Get a Transaction by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Transaction ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Transaction data",
-                        "schema": {
-                            "$ref": "#/definitions/model.Transaction"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/transactions/{id}/payment": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get a Transaction Payemnt by transaction id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "TransactionPayment"
-                ],
-                "summary": "Get a Transaction Payemnt by transaction id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Transaction ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Transaction data",
-                        "schema": {
-                            "$ref": "#/definitions/model.Transaction"
                         }
                     },
                     "400": {
@@ -613,7 +1084,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create new Transaction Sell Line",
+                "description": "Create new Product",
                 "consumes": [
                     "application/json"
                 ],
@@ -621,32 +1092,25 @@
                     "application/json"
                 ],
                 "tags": [
-                    "TransactionPayment"
+                    "Product"
                 ],
-                "summary": "Create new Transaction Sell Line",
+                "summary": "Create new Product",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "Transaction ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Transaction data",
+                        "description": "Product data",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.PaymentTransactionAPI"
+                            "$ref": "#/definitions/model.ProductAPI"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "Transaction data",
+                        "description": "Product data",
                         "schema": {
-                            "$ref": "#/definitions/model.PaymentTransaction"
+                            "$ref": "#/definitions/model.Product"
                         }
                     },
                     "400": {
@@ -682,14 +1146,14 @@
                 }
             }
         },
-        "/transactions/{id}/payment/{payment_id}": {
+        "/products/{id}": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get a  single Transaction Payment by id",
+                "description": "Get a Product by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -697,30 +1161,23 @@
                     "application/json"
                 ],
                 "tags": [
-                    "TransactionPayment"
+                    "Product"
                 ],
-                "summary": "Get a  single Transaction Payment by id",
+                "summary": "Get a Product by id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Transaction ID",
+                        "description": "Product ID",
                         "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Payment ID",
-                        "name": "payment_id",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Transaction Payment data",
+                        "description": "Product data",
                         "schema": {
-                            "$ref": "#/definitions/model.PaymentTransaction"
+                            "$ref": "#/definitions/model.Product"
                         }
                     },
                     "400": {
@@ -748,16 +1205,14 @@
                         }
                     }
                 }
-            }
-        },
-        "/transactions/{id}/status/{status}": {
-            "post": {
+            },
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Update Transaction Status by ID",
+                "description": "Update Product by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -765,21 +1220,88 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Transaction"
+                    "Product"
                 ],
-                "summary": "Update Transaction Status by ID",
+                "summary": "Update Product by id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Transaction ID",
+                        "description": "Product ID",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
+                        "description": "Product data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ProductAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Product"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Delete Product by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "Delete Product by id",
+                "parameters": [
+                    {
                         "type": "string",
-                        "description": "Status Transaction",
-                        "name": "status",
+                        "description": "Product ID",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -824,14 +1346,14 @@
                 }
             }
         },
-        "/transactions/{id}/update": {
-            "put": {
+        "/users": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Update Transaction Draft",
+                "description": "List of User",
                 "consumes": [
                     "application/json"
                 ],
@@ -839,32 +1361,257 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Transaction"
+                    "User"
                 ],
-                "summary": "Update Transaction Draft",
+                "summary": "List of User",
                 "parameters": [
                     {
-                        "description": "Transaction data",
+                        "type": "integer",
+                        "description": "Page number start from zero",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size per page, default `0`",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by field, adding dash (`-`) at the beginning means descending and vice versa",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Select specific fields with comma separated",
+                        "name": "fields",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "custom filters, see [more details](https://github.com/morkid/paginate#filter-format)",
+                        "name": "filters",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of User",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/lib.Page"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.User"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Create new User",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create new User",
+                "parameters": [
+                    {
+                        "description": "User data",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.TransactionUpdate"
+                            "$ref": "#/definitions/model.UserAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User data",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a User by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get a User by id",
+                "parameters": [
                     {
                         "type": "string",
-                        "description": "Transaction ID",
+                        "description": "User ID",
                         "name": "id",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Transaction data",
+                    "200": {
+                        "description": "User data",
                         "schema": {
-                            "$ref": "#/definitions/model.Transaction"
+                            "$ref": "#/definitions/model.User"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Update User by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Update User by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User data",
+                        "schema": {
+                            "$ref": "#/definitions/model.User"
                         }
                     },
                     "400": {
@@ -963,928 +1710,346 @@
                 }
             }
         },
-        "model.PaymentTransaction": {
+        "model.Cart": {
             "type": "object",
-            "required": [
-                "payment_type",
-                "transaction_status"
-            ],
             "properties": {
                 "additional": {
                     "type": "string"
                 },
-                "amount": {
-                    "type": "number"
+                "price": {
+                    "description": "Price",
+                    "type": "number",
+                    "example": 10000
                 },
-                "approval_code": {
+                "product": {
+                    "$ref": "#/definitions/model.Product"
+                },
+                "productid": {
+                    "description": "ProductID",
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quantity": {
+                    "description": "Quantity",
+                    "type": "integer",
+                    "example": 1
+                },
+                "userid": {
+                    "description": "UserID",
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        },
+        "model.CartAPI": {
+            "type": "object",
+            "properties": {
+                "price": {
+                    "description": "Price",
+                    "type": "number",
+                    "example": 10000
+                },
+                "productid": {
+                    "description": "ProductID",
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quantity": {
+                    "description": "Quantity",
+                    "type": "integer",
+                    "example": 1
+                },
+                "userid": {
+                    "description": "UserID",
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        },
+        "model.Category": {
+            "type": "object",
+            "properties": {
+                "additional": {
                     "type": "string"
                 },
-                "approval_local_timestamp": {
+                "code": {
+                    "description": "Code",
                     "type": "string",
-                    "format": "date-time"
+                    "example": "food"
                 },
-                "approval_timestamp": {
+                "name": {
+                    "description": "Name",
                     "type": "string",
-                    "format": "date-time"
+                    "example": "Food"
+                }
+            }
+        },
+        "model.CategoryAPI": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "Code",
+                    "type": "string",
+                    "example": "food"
                 },
-                "comment": {
+                "name": {
+                    "description": "Name",
+                    "type": "string",
+                    "example": "Food"
+                }
+            }
+        },
+        "model.LoginAPI": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "example": "@Password123"
+                },
+                "remember": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "username": {
+                    "type": "string",
+                    "example": "armadamuhammads@gmail.com"
+                }
+            }
+        },
+        "model.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "$ref": "#/definitions/model.ResponseToken"
+                },
+                "user": {
+                    "$ref": "#/definitions/model.User"
+                }
+            }
+        },
+        "model.Product": {
+            "type": "object",
+            "properties": {
+                "additional": {
                     "type": "string"
                 },
-                "currency_id": {
+                "categoryid": {
+                    "description": "CategoryID",
                     "type": "string",
                     "format": "uuid"
                 },
                 "description": {
+                    "description": "Description",
                     "type": "string"
                 },
-                "partner_transaction_number": {
-                    "type": "string"
-                },
-                "partner_transaction_status": {
-                    "type": "string"
-                },
-                "payment_gateway_id": {
+                "name": {
+                    "description": "Name",
                     "type": "string",
-                    "format": "uuid"
+                    "example": "Sepatu"
                 },
-                "payment_type": {
+                "price": {
+                    "description": "Price",
+                    "type": "number",
+                    "example": 10000
+                },
+                "sku": {
+                    "description": "SKU",
                     "type": "string",
-                    "enum": [
-                        "cash",
-                        "cashless"
-                    ]
-                },
-                "reference_number": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "transaction_id": {
-                    "type": "string"
-                },
-                "transaction_number": {
-                    "type": "string"
-                },
-                "transaction_status": {
-                    "type": "string",
-                    "enum": [
-                        "paid",
-                        "due",
-                        "partial"
-                    ]
-                },
-                "transaction_timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "transaction_type": {
-                    "type": "string"
+                    "example": "PR-0000001"
                 }
             }
         },
-        "model.PaymentTransactionAPI": {
+        "model.ProductAPI": {
             "type": "object",
-            "required": [
-                "payment_type",
-                "transaction_status"
-            ],
             "properties": {
-                "amount": {
-                    "type": "number"
-                },
-                "approval_code": {
-                    "type": "string"
-                },
-                "approval_local_timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "approval_timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "comment": {
-                    "type": "string"
-                },
-                "currency_id": {
+                "categoryid": {
+                    "description": "CategoryID",
                     "type": "string",
                     "format": "uuid"
                 },
                 "description": {
+                    "description": "Description",
                     "type": "string"
                 },
-                "partner_transaction_number": {
-                    "type": "string"
-                },
-                "partner_transaction_status": {
-                    "type": "string"
-                },
-                "payment_gateway_id": {
+                "name": {
+                    "description": "Name",
                     "type": "string",
-                    "format": "uuid"
+                    "example": "Sepatu"
                 },
-                "payment_type": {
+                "price": {
+                    "description": "Price",
+                    "type": "number",
+                    "example": 10000
+                },
+                "sku": {
+                    "description": "SKU",
                     "type": "string",
-                    "enum": [
-                        "cash",
-                        "cashless"
-                    ]
-                },
-                "reference_number": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "transaction_id": {
-                    "type": "string"
-                },
-                "transaction_number": {
-                    "type": "string"
-                },
-                "transaction_status": {
-                    "type": "string",
-                    "enum": [
-                        "paid",
-                        "due",
-                        "partial"
-                    ]
-                },
-                "transaction_timestamp": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "transaction_type": {
-                    "type": "string"
+                    "example": "PR-0000001"
                 }
             }
         },
-        "model.Transaction": {
+        "model.RegistrationAPI": {
             "type": "object",
             "required": [
-                "payment_status",
-                "status_transaction",
-                "type"
+                "confirm_password",
+                "email",
+                "first_name",
+                "password"
             ],
             "properties": {
-                "additional": {
+                "confirm_password": {
+                    "type": "string",
+                    "example": "@Password123"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "armadamuhammads@gmail.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "Armada"
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "Muhammad"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "@Password123"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "089678009400"
+                }
+            }
+        },
+        "model.ResponseToken": {
+            "type": "object",
+            "properties": {
+                "access_token": {
                     "type": "string"
                 },
-                "business_id": {
-                    "description": "Business ID",
-                    "type": "string",
-                    "format": "uuid"
+                "expires_in": {
+                    "type": "integer"
                 },
-                "business_location_id": {
-                    "description": "Business Location ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "contact_id": {
-                    "description": "Contact ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "contact_mobile": {
-                    "type": "string",
-                    "example": "089123456789"
-                },
-                "contact_name": {
-                    "type": "string",
-                    "example": "alan"
-                },
-                "flow": {
-                    "description": "Flow is filled by status transaction",
-                    "type": "string",
-                    "example": "draft|ordered|cancel"
-                },
-                "invoice_no": {
-                    "description": "Invoice No",
-                    "type": "string",
-                    "example": "AS134412"
-                },
-                "is_recurring": {
+                "is_admin": {
                     "type": "boolean"
                 },
-                "notes": {
+                "refresh_token": {
                     "type": "string"
                 },
-                "opening_stock_product_id": {
-                    "description": "Opening Stock Product ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "payment_status": {
-                    "description": "Payment Status",
-                    "type": "string",
-                    "enum": [
-                        "paid",
-                        "due",
-                        "partial"
-                    ],
-                    "example": "paid"
-                },
-                "promo_amount": {
-                    "description": "Tax Amount",
-                    "type": "number",
-                    "example": 10
-                },
-                "promo_id": {
-                    "description": "Promo ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "promo_name": {
-                    "description": "Promo Amount",
-                    "type": "string",
-                    "example": "Weekend Special"
-                },
-                "promo_type": {
-                    "description": "Promo Amount",
-                    "type": "string",
-                    "enum": [
-                        "fixed",
-                        "percentage"
-                    ],
-                    "example": "percentage"
-                },
-                "purchase_order": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.TransactionPurchaseLine"
-                    }
-                },
-                "recur_interval": {
-                    "type": "integer"
-                },
-                "recur_repeat_on": {
-                    "type": "string",
-                    "enum": [
-                        "Day",
-                        "Week",
-                        "Month",
-                        "Year"
-                    ],
-                    "example": "Day"
-                },
-                "recur_repetition": {
-                    "type": "integer"
-                },
-                "recur_stopped_on": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "references_no": {
-                    "description": "References No",
-                    "type": "string",
-                    "example": "11"
-                },
-                "sell_line": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.TransactionSellLine"
-                    }
-                },
-                "status_transaction": {
-                    "description": "Status Transaction",
-                    "type": "string",
-                    "enum": [
-                        "draft",
-                        "waiting",
-                        "paid",
-                        "ordered",
-                        "ready_to_shipping",
-                        "shipping",
-                        "arrived",
-                        "received",
-                        "done",
-                        "pending",
-                        "cancel",
-                        "refuse",
-                        "expired"
-                    ],
-                    "example": "waiting"
-                },
-                "tax_amount": {
-                    "description": "Tax Amount",
-                    "type": "number",
-                    "example": 10
-                },
-                "tax_id": {
-                    "description": "Tax ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "tax_name": {
-                    "description": "Tax Amount",
-                    "type": "string",
-                    "example": "PPN 10%"
-                },
-                "total_pay": {
-                    "description": "Total Price",
-                    "type": "number",
-                    "example": 50000
-                },
-                "total_price": {
-                    "description": "Total Price",
-                    "type": "number",
-                    "example": 50000
-                },
-                "total_price_before": {
-                    "description": "Total Price Before",
-                    "type": "number",
-                    "example": 1000
-                },
-                "transaction_category_id": {
-                    "description": "Business Location ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "transaction_date": {
-                    "description": "Transaction Date",
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "transaction_payment": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.PaymentTransaction"
-                    }
-                },
-                "type": {
-                    "description": "Type",
-                    "type": "string",
-                    "enum": [
-                        "opening_stock",
-                        "purchase",
-                        "sell",
-                        "income",
-                        "expense",
-                        "subscription"
-                    ],
-                    "example": "sell"
+                "token_type": {
+                    "type": "string"
                 }
             }
         },
-        "model.TransactionAPI": {
+        "model.User": {
             "type": "object",
-            "required": [
-                "payment_status",
-                "status_transaction",
-                "type"
-            ],
             "properties": {
-                "business_id": {
-                    "description": "Business ID",
-                    "type": "string",
-                    "format": "uuid"
+                "additional": {
+                    "type": "string"
                 },
-                "business_location_id": {
-                    "description": "Business Location ID",
+                "email": {
+                    "description": "Email",
                     "type": "string",
-                    "format": "uuid"
+                    "example": "armadamuhammads@gmail.com"
                 },
-                "contact_id": {
-                    "description": "Contact ID",
+                "firstname": {
+                    "description": "FirstName",
                     "type": "string",
-                    "format": "uuid"
+                    "example": "Armada"
                 },
-                "contact_mobile": {
-                    "type": "string",
-                    "example": "089123456789"
-                },
-                "contact_name": {
-                    "type": "string",
-                    "example": "alan"
-                },
-                "flow": {
-                    "description": "Flow is filled by status transaction",
-                    "type": "string",
-                    "example": "draft|ordered|cancel"
-                },
-                "invoice_no": {
-                    "description": "Invoice No",
-                    "type": "string",
-                    "example": "AS134412"
-                },
-                "is_recurring": {
+                "isadmin": {
+                    "description": "IsAdmin",
                     "type": "boolean"
                 },
-                "notes": {
-                    "type": "string"
+                "isverified": {
+                    "description": "IsVerified",
+                    "type": "boolean"
                 },
-                "opening_stock_product_id": {
-                    "description": "Opening Stock Product ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "payment_status": {
-                    "description": "Payment Status",
-                    "type": "string",
-                    "enum": [
-                        "paid",
-                        "due",
-                        "partial"
-                    ],
-                    "example": "paid"
-                },
-                "promo_amount": {
-                    "description": "Tax Amount",
-                    "type": "number",
-                    "example": 10
-                },
-                "promo_id": {
-                    "description": "Promo ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "promo_name": {
-                    "description": "Promo Amount",
-                    "type": "string",
-                    "example": "Weekend Special"
-                },
-                "promo_type": {
-                    "description": "Promo Amount",
-                    "type": "string",
-                    "enum": [
-                        "fixed",
-                        "percentage"
-                    ],
-                    "example": "percentage"
-                },
-                "recur_interval": {
-                    "type": "integer"
-                },
-                "recur_repeat_on": {
-                    "type": "string",
-                    "enum": [
-                        "Day",
-                        "Week",
-                        "Month",
-                        "Year"
-                    ],
-                    "example": "Day"
-                },
-                "recur_repetition": {
-                    "type": "integer"
-                },
-                "recur_stopped_on": {
+                "lastlogin": {
+                    "description": "LastLogin",
                     "type": "string",
                     "format": "date-time"
                 },
-                "references_no": {
-                    "description": "References No",
+                "lastname": {
+                    "description": "LastName",
                     "type": "string",
-                    "example": "11"
+                    "example": "Muhammad Siswanto"
                 },
-                "status_transaction": {
-                    "description": "Status Transaction",
+                "password": {
+                    "description": "Password",
+                    "type": "string"
+                },
+                "phonenumber": {
+                    "description": "PhoneNumber",
                     "type": "string",
-                    "enum": [
-                        "draft",
-                        "waiting",
-                        "paid",
-                        "ordered",
-                        "ready_to_shipping",
-                        "shipping",
-                        "arrived",
-                        "received",
-                        "done",
-                        "pending",
-                        "cancel",
-                        "refuse",
-                        "expired"
-                    ],
-                    "example": "waiting"
+                    "example": "089678009400"
                 },
-                "tax_amount": {
-                    "description": "Tax Amount",
-                    "type": "number",
-                    "example": 10
+                "username": {
+                    "description": "Username",
+                    "type": "string"
                 },
-                "tax_id": {
-                    "description": "Tax ID",
+                "verificationcode": {
+                    "description": "VerificationCode",
                     "type": "string",
-                    "format": "uuid"
-                },
-                "tax_name": {
-                    "description": "Tax Amount",
+                    "example": "2024"
+                }
+            }
+        },
+        "model.UserAPI": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "Email",
                     "type": "string",
-                    "example": "PPN 10%"
+                    "example": "armadamuhammads@gmail.com"
                 },
-                "total_pay": {
-                    "description": "Total Price",
-                    "type": "number",
-                    "example": 50000
-                },
-                "total_price": {
-                    "description": "Total Price",
-                    "type": "number",
-                    "example": 50000
-                },
-                "total_price_before": {
-                    "description": "Total Price Before",
-                    "type": "number",
-                    "example": 1000
-                },
-                "transaction_category_id": {
-                    "description": "Business Location ID",
+                "firstname": {
+                    "description": "FirstName",
                     "type": "string",
-                    "format": "uuid"
+                    "example": "Armada"
                 },
-                "transaction_date": {
-                    "description": "Transaction Date",
+                "isadmin": {
+                    "description": "IsAdmin",
+                    "type": "boolean"
+                },
+                "isverified": {
+                    "description": "IsVerified",
+                    "type": "boolean"
+                },
+                "lastlogin": {
+                    "description": "LastLogin",
                     "type": "string",
                     "format": "date-time"
                 },
-                "type": {
-                    "description": "Type",
+                "lastname": {
+                    "description": "LastName",
                     "type": "string",
-                    "enum": [
-                        "opening_stock",
-                        "purchase",
-                        "sell",
-                        "income",
-                        "expense",
-                        "subscription"
-                    ],
-                    "example": "sell"
-                }
-            }
-        },
-        "model.TransactionIncomeAPI": {
-            "type": "object",
-            "properties": {
-                "payment": {
-                    "$ref": "#/definitions/model.PaymentTransactionAPI"
+                    "example": "Muhammad Siswanto"
                 },
-                "transaction": {
-                    "$ref": "#/definitions/model.TransactionAPI"
-                }
-            }
-        },
-        "model.TransactionIncomeResponse": {
-            "type": "object",
-            "properties": {
-                "payment": {
-                    "$ref": "#/definitions/model.PaymentTransaction"
-                },
-                "transaction": {
-                    "$ref": "#/definitions/model.Transaction"
-                }
-            }
-        },
-        "model.TransactionPurchaseLine": {
-            "type": "object",
-            "properties": {
-                "additional": {
+                "password": {
+                    "description": "Password",
                     "type": "string"
                 },
-                "product_id": {
-                    "description": "ProductID ID",
+                "phonenumber": {
+                    "description": "PhoneNumber",
                     "type": "string",
-                    "format": "uuid"
+                    "example": "089678009400"
                 },
-                "product_name": {
-                    "description": "Product Name",
-                    "type": "string",
-                    "example": "Samsung"
-                },
-                "promo_amount": {
-                    "description": "Tax Amount",
-                    "type": "number",
-                    "example": 10
-                },
-                "promo_name": {
-                    "description": "Promo Name",
-                    "type": "string",
-                    "example": "Promo akhir bulan"
-                },
-                "promo_type": {
-                    "description": "Promo Type (e.g : 'fixed', 'percentage')",
-                    "type": "string",
-                    "example": "fixed"
-                },
-                "qty": {
-                    "description": "Qty",
-                    "type": "integer"
-                },
-                "stock_id": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "sub_unit_price": {
-                    "type": "number"
-                },
-                "tax_amount": {
-                    "description": "Tax Amount",
-                    "type": "number",
-                    "example": 10
-                },
-                "tax_name": {
-                    "description": "Tax Name",
-                    "type": "string",
-                    "example": "Ppn 10%"
-                },
-                "transaction_id": {
-                    "description": "Transaction ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "type": {
-                    "description": "Type (e.g : 'custom','single','variation')",
+                "username": {
+                    "description": "Username",
                     "type": "string"
                 },
-                "unit_price": {
-                    "description": "Unit Price",
-                    "type": "number",
-                    "example": 5000
-                },
-                "unit_price_before": {
-                    "description": "Unit Price Before",
-                    "type": "number",
-                    "example": 5000
-                }
-            }
-        },
-        "model.TransactionPurchaseLineAPI": {
-            "type": "object",
-            "properties": {
-                "product_id": {
-                    "description": "ProductID ID",
+                "verificationcode": {
+                    "description": "VerificationCode",
                     "type": "string",
-                    "format": "uuid"
-                },
-                "product_name": {
-                    "description": "Product Name",
-                    "type": "string",
-                    "example": "Samsung"
-                },
-                "promo_amount": {
-                    "description": "Tax Amount",
-                    "type": "number",
-                    "example": 10
-                },
-                "promo_name": {
-                    "description": "Promo Name",
-                    "type": "string",
-                    "example": "Promo akhir bulan"
-                },
-                "promo_type": {
-                    "description": "Promo Type (e.g : 'fixed', 'percentage')",
-                    "type": "string",
-                    "example": "fixed"
-                },
-                "qty": {
-                    "description": "Qty",
-                    "type": "integer"
-                },
-                "stock_id": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "sub_unit_price": {
-                    "type": "number"
-                },
-                "tax_amount": {
-                    "description": "Tax Amount",
-                    "type": "number",
-                    "example": 10
-                },
-                "tax_name": {
-                    "description": "Tax Name",
-                    "type": "string",
-                    "example": "Ppn 10%"
-                },
-                "transaction_id": {
-                    "description": "Transaction ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "type": {
-                    "description": "Type (e.g : 'custom','single','variation')",
-                    "type": "string"
-                },
-                "unit_price": {
-                    "description": "Unit Price",
-                    "type": "number",
-                    "example": 5000
-                },
-                "unit_price_before": {
-                    "description": "Unit Price Before",
-                    "type": "number",
-                    "example": 5000
-                }
-            }
-        },
-        "model.TransactionPurchaseLinePayload": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "detail": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.TransactionPurchaseLineAPI"
-                    }
-                },
-                "payment": {
-                    "$ref": "#/definitions/model.PaymentTransactionAPI"
-                },
-                "transaction": {
-                    "$ref": "#/definitions/model.TransactionAPI"
-                }
-            }
-        },
-        "model.TransactionPurchaseLineResponse": {
-            "type": "object",
-            "properties": {
-                "detail": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.TransactionPurchaseLine"
-                    }
-                },
-                "payment": {
-                    "$ref": "#/definitions/model.PaymentTransaction"
-                },
-                "transaction": {
-                    "$ref": "#/definitions/model.Transaction"
-                }
-            }
-        },
-        "model.TransactionSellLine": {
-            "type": "object",
-            "properties": {
-                "additional": {
-                    "type": "string"
-                },
-                "product_id": {
-                    "description": "ProductID ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "product_name": {
-                    "description": "Product Name",
-                    "type": "string",
-                    "example": "Samsung"
-                },
-                "promo_amount": {
-                    "type": "number",
-                    "example": 10
-                },
-                "promo_name": {
-                    "description": "PromoID         *uuid.UUID `json:\"promo_id,omitempty\" swaggertype:\"string\" format:\"uuid\"` // Promo ID",
-                    "type": "string",
-                    "example": "10"
-                },
-                "promo_type": {
-                    "description": "Promo Amount",
-                    "type": "string",
-                    "example": "10"
-                },
-                "qty": {
-                    "description": "Qty",
-                    "type": "integer"
-                },
-                "stock_id": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "tax_amount": {
-                    "type": "number"
-                },
-                "tax_id": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "tax_name": {
-                    "type": "string"
-                },
-                "transaction_id": {
-                    "description": "Transaction ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "unit_price": {
-                    "type": "number"
-                },
-                "unit_price_before": {
-                    "type": "number"
-                }
-            }
-        },
-        "model.TransactionSellLineAPI": {
-            "type": "object",
-            "properties": {
-                "product_id": {
-                    "description": "ProductID ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "product_name": {
-                    "description": "Product Name",
-                    "type": "string",
-                    "example": "Samsung"
-                },
-                "promo_amount": {
-                    "type": "number",
-                    "example": 10
-                },
-                "promo_name": {
-                    "description": "PromoID         *uuid.UUID `json:\"promo_id,omitempty\" swaggertype:\"string\" format:\"uuid\"` // Promo ID",
-                    "type": "string",
-                    "example": "10"
-                },
-                "promo_type": {
-                    "description": "Promo Amount",
-                    "type": "string",
-                    "example": "10"
-                },
-                "qty": {
-                    "description": "Qty",
-                    "type": "integer"
-                },
-                "stock_id": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "tax_amount": {
-                    "type": "number"
-                },
-                "tax_id": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "tax_name": {
-                    "type": "string"
-                },
-                "transaction_id": {
-                    "description": "Transaction ID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "unit_price": {
-                    "type": "number"
-                },
-                "unit_price_before": {
-                    "type": "number"
-                }
-            }
-        },
-        "model.TransactionSellLinePayload": {
-            "type": "object",
-            "properties": {
-                "detail": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.TransactionSellLineAPI"
-                    }
-                },
-                "payment": {
-                    "$ref": "#/definitions/model.PaymentTransactionAPI"
-                },
-                "transaction": {
-                    "$ref": "#/definitions/model.TransactionAPI"
-                }
-            }
-        },
-        "model.TransactionSellLineResponse": {
-            "type": "object",
-            "properties": {
-                "detail": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.TransactionSellLine"
-                    }
-                },
-                "payment_status": {
-                    "type": "string"
-                },
-                "transaction": {
-                    "$ref": "#/definitions/model.Transaction"
-                }
-            }
-        },
-        "model.TransactionUpdate": {
-            "type": "object",
-            "properties": {
-                "payment": {
-                    "$ref": "#/definitions/model.PaymentTransactionAPI"
-                },
-                "purchase": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.TransactionPurchaseLine"
-                    }
-                },
-                "sell": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.TransactionSellLine"
-                    }
-                },
-                "transaction": {
-                    "$ref": "#/definitions/model.TransactionAPI"
+                    "example": "2024"
                 }
             }
         }

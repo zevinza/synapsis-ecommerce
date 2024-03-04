@@ -15,6 +15,6 @@ type TransactionDetailAPI struct {
 	ProductDescription *string    `json:"product_description,omitempty"`
 	ProductPrice       *float64   `json:"product_price,omitempty"`
 	Quantity           *int64     `json:"quantity,omitempty"`
-	SubTotalPrice      *float64   `json:"sub_total_price,omitempty"`
+	SubtotalPrice      *float64   `json:"subtotal_price,omitempty"`
 	Notes              *string    `json:"notes,omitempty"`
 }

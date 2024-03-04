@@ -20,7 +20,7 @@ import (
 // @Failure 409 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
-// @Security TokenKey
+// @Security ApiKeyAuth
 // @Router /products/{id} [delete]
 // @Tags Product
 func DeleteProduct(c *fiber.Ctx) error {

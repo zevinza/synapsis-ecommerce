@@ -1,4 +1,4 @@
-package cart
+package user
 
 import (
 	"api/app/lib"
@@ -9,27 +9,31 @@ import (
 	"github.com/google/uuid"
 )
 
-// GetCartID godoc
-// @Summary Get a Cart by id
-// @Description Get a Cart by id
-// @Param id path string true "Cart ID"
+// GetUserID godoc
+// @Summary Get a User by id
+// @Description Get a User by id
+// @Param id path string true "User ID"
 // @Accept  application/json
 // @Produce application/json
-// @Success 200 {object} model.Cart "Cart data"
+// @Success 200 {object} model.User "User data"
 // @Failure 400 {object} lib.Response
 // @Failure 404 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
 // @Security ApiKeyAuth
-// @Router /carts/{id} [get]
-// @Tags Cart
-func GetCartID(c *fiber.Ctx) error {
+// @Router /users/{id} [get]
+// @Tags User
+func GetUserID(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext())
 	id, _ := uuid.Parse(c.Params("id"))
 
-	var data model.Cart
+	if !lib.GetXIsAdmin(c) && lib.GetXUserID(c) != nil {
+		id = *lib.GetXUserID(c)
+	}
+
+	var data model.User
 	result := db.Model(&data).
-		Where(db.Where(model.Cart{
+		Where(db.Where(model.User{
 			Base: model.Base{
 				ID: &id,
 			},

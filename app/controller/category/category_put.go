@@ -22,7 +22,7 @@ import (
 // @Failure 409 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
-// @Security TokenKey
+// @Security ApiKeyAuth
 // @Router /categories/{id} [put]
 // @Tags Category
 func PutCategory(c *fiber.Ctx) error {

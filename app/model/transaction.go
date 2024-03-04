@@ -6,6 +6,8 @@ type Transaction struct {
 	Base
 	DataOwner
 	TransactionAPI
+	Payments *[]TransactionPayment `json:"payments,omitempty"`
+	Details  *[]TransactionDetail  `json:"details,omitempty"`
 }
 
 type TransactionAPI struct {
@@ -22,8 +24,17 @@ type TransactionAPI struct {
 	ContactDetail     *string    `json:"contact_detail,omitempty"`
 }
 
+// type TransactionPayload struct {
+// 	Data    *TransactionAPI        `json:"data,omitempty"`
+// 	Payment *TransactionPaymentAPI `json:"payment,omitempty"`
+// 	CartIds *[]uuid.UUID           `json:"cart_ids,omitempty"`
+// }
+
 type TransactionPayload struct {
-	Data    *TransactionAPI         `json:"data,omitempty"`
-	Payment *TransactionPaymentAPI  `json:"payment,omitempty"`
-	Details *[]TransactionDetailAPI `json:"details,omitempty"`
+	CartIds     *[]uuid.UUID `json:"cart_ids,omitempty"`
+	Notes       *string      `json:"notes,omitempty"`
+	InvoiceNo   *string      `json:"invoice_no,omitempty"`
+	Description *string      `json:"description,omitempty"`
+	Discount    *float64     `json:"discount,omitempty"`
+	Fee         *float64     `json:"fee,omitempty"`
 }

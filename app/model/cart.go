@@ -12,8 +12,15 @@ type Cart struct {
 
 // CartAPI Cart API
 type CartAPI struct {
-	UserID    *uuid.UUID `json:"userid,omitempty" swaggertype:"string" format:"uuid"`    // UserID
-	ProductID *uuid.UUID `json:"productid,omitempty" swaggertype:"string" format:"uuid"` // ProductID
-	Quantity  *int64     `json:"quantity,omitempty" example:"1"`                         // Quantity
-	Price     *float64   `json:"price,omitempty" example:"10000"`                        // Price
+	UserID    *uuid.UUID `json:"user_id,omitempty" swaggertype:"string" format:"uuid"`    // UserID
+	ProductID *uuid.UUID `json:"product_id,omitempty" swaggertype:"string" format:"uuid"` // ProductID
+	Quantity  *int64     `json:"quantity,omitempty" example:"1"`                          // Quantity
+	Price     *float64   `json:"price,omitempty" example:"10000"`                         // Price
+	Notes     *string    `json:"notes,omitempty"`
+}
+
+type CartPayload struct {
+	ProductID *uuid.UUID `json:"product_id,omitempty" swaggertype:"string" format:"uuid"` // ProductID
+	Quantity  *int64     `json:"quantity,omitempty" example:"1"`                          // Quantity
+	Notes     *string    `json:"notes,omitempty"`
 }

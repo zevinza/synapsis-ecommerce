@@ -20,7 +20,7 @@ import (
 // @Failure 404 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
-// @Security TokenKey
+// @Security ApiKeyAuth
 // @Router /categories/{id} [get]
 // @Tags Category
 func GetCategoryID(c *fiber.Ctx) error {

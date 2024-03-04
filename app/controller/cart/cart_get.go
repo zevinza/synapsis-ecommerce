@@ -23,7 +23,7 @@ import (
 // @Failure 404 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
-// @Security TokenKey
+// @Security ApiKeyAuth
 // @Router /carts [get]
 // @Tags Cart
 func GetCart(c *fiber.Ctx) error {
