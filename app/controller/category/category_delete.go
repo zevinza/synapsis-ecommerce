@@ -24,6 +24,9 @@ import (
 // @Router /categories/{id} [delete]
 // @Tags Category
 func DeleteCategory(c *fiber.Ctx) error {
+	if !lib.GetXIsAdmin(c) {
+		return lib.ErrorUnauthorized(c)
+	}
 	db := services.DB.WithContext(c.UserContext())
 
 	var data model.Category

@@ -6,7 +6,6 @@ package model
 
 import (
 	"fmt"
-	"math/rand"
 	"time"
 
 	"github.com/go-openapi/strfmt"
@@ -27,15 +26,15 @@ func now() *strfmt.DateTime {
 	return &now
 }
 
-// randomNumber function
-func randomNumber(length int) *string {
-	charset := "0123456789"
-	result := make([]byte, length)
-	for i := range result {
-		result[i] = charset[rand.Intn(len(charset))]
-	}
-	res := string(result)
-	return &res
-}
+// // randomNumber function
+// func randomNumber(length int) *string {
+// 	charset := "0123456789"
+// 	result := make([]byte, length)
+// 	for i := range result {
+// 		result[i] = charset[rand.Intn(len(charset))]
+// 	}
+// 	res := string(result)
+// 	return &res
+// }
 
 func strptr(s string) *string { return &s }

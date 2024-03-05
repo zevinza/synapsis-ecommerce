@@ -26,7 +26,7 @@ import (
 // @Router /carts/{id} [put]
 // @Tags Cart
 func PutCart(c *fiber.Ctx) error {
-	api := new(model.CartAPI)
+	api := new(model.CartPayload)
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)
 	}
@@ -46,8 +46,15 @@ func PutCart(c *fiber.Ctx) error {
 		return lib.ErrorNotFound(c)
 	}
 
-	lib.Merge(api, &data)
+	if lib.RevInt64(api.Quantity) != lib.RevInt64(data.Quantity) {
+		product := model.Product{}
+		db.Where(`id = ?`).Take(&product)
+		data.Price = lib.Float64ptr(float64(lib.RevInt64(api.Quantity)) * lib.RevFloat64(product.Price))
+		data.Quantity = api.Quantity
+	}
+
 	data.ModifierID = lib.GetXUserID(c)
+	data.Notes = api.Notes
 
 	if err := db.Model(&data).Updates(&data).Error; nil != err {
 		return lib.ErrorConflict(c, err.Error())
