@@ -20,6 +20,7 @@ type TransactionAPI struct {
 	TotalDiscount     *float64   `json:"total_discount,omitempty"`
 	TotalFee          *float64   `json:"total_fee,omitempty"`
 	TotalPrice        *float64   `json:"total_price,omitempty"`
+	TotalPaid         *float64   `json:"total_paid,omitempty"`
 	ContactName       *string    `json:"contact_name,omitempty"`
 	ContactDetail     *string    `json:"contact_detail,omitempty"`
 }
@@ -31,7 +32,7 @@ type TransactionAPI struct {
 // }
 
 type TransactionPayload struct {
-	CartIds     *[]uuid.UUID `json:"cart_ids,omitempty"`
+	CartIds     *[]uuid.UUID `json:"cart_ids,omitempty" swaggertype:"string" format:"uuid"`
 	Notes       *string      `json:"notes,omitempty"`
 	InvoiceNo   *string      `json:"invoice_no,omitempty"`
 	Description *string      `json:"description,omitempty"`

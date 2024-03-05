@@ -26,6 +26,6 @@ func TestPasswordCompare(t *testing.T) {
 
 func TestGenPassword(t *testing.T) {
 	LoadEnvironment(config.Environment)
-	plain := "password"
+	plain := "@Password123"
 	log.Println(GenPassword(plain))
 }

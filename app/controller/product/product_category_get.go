@@ -17,6 +17,7 @@ import (
 // @Param sort query string false "Sort by field, adding dash (`-`) at the beginning means descending and vice versa"
 // @Param fields query string false "Select specific fields with comma separated"
 // @Param filters query string false "custom filters, see [more details](https://github.com/morkid/paginate#filter-format)"
+// @Param id path string true "Category ID"
 // @Accept  application/json
 // @Produce application/json
 // @Success 200 {object} lib.Page{items=[]model.Product} "List of Product"

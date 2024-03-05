@@ -74,6 +74,8 @@ func Handle(app *fiber.App) {
 	transactionAPI := api.Group("/transactions")
 	transactionAPI.Use(middleware.Oauth2Authentication)
 	transactionAPI.Post("/", transaction.PostTransaction)
+	transactionAPI.Get("/", transaction.GetTransaction)
+	transactionAPI.Get("/:id", transaction.GetTransactionID)
 	transactionAPI.Post("/:id/payment", transaction.PostTransactionPayment)
 	transactionAPI.Post("/:id/cancel", transaction.PostTransactionCancel)
 

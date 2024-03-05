@@ -45,14 +45,18 @@ func PostAccountRegister(c *fiber.Ctx) error {
 	if user.Username == nil {
 		var count int64 = 0
 		prefix := strings.Split(lib.RevStr(user.Email), "@")
-		db.Model(&model.User{}).Where(`username = ?`, prefix).Count(&count)
+		db.Model(&model.User{}).Where(`username = ?`, prefix[0]).Count(&count)
 
-		user.Username = lib.Strptr(prefix[0] + fmt.Sprint(count))
+		strCount := ""
+		if count > 0 {
+			strCount = fmt.Sprint(count)
+		}
+		user.Username = lib.Strptr(prefix[0] + strCount)
 	}
 
 	if err := db.Create(&user).Error; err != nil {
 		return lib.ErrorConflict(c, err)
 	}
 
-	return lib.OK(c)
+	return lib.OK(c, user)
 }

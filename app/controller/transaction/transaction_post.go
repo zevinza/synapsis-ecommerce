@@ -6,9 +6,25 @@ import (
 	"api/app/services"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
+// PostTransactionPayment godoc
+// @Summary Post new Transaction
+// @Description Post new Transaction
+// @Param data body model.TransactionPayload true "Transaction data"
+// @Accept  application/json
+// @Produce application/json
+// @Success 201 {object} model.Transaction "Transaction data"
+// @Failure 400 {object} lib.Response
+// @Failure 404 {object} lib.Response
+// @Failure 409 {object} lib.Response
+// @Failure 500 {object} lib.Response
+// @Failure default {object} lib.Response
+// @Security ApiKeyAuth
+// @Router /transactions/ [post]
+// @Tags Transaction
 func PostTransaction(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext())
 	userID := lib.GetXUserID(c)
@@ -23,15 +39,26 @@ func PostTransaction(c *fiber.Ctx) error {
 	trx := model.Transaction{}
 	trx.ID = transactionID
 	trx.CreatorID = userID
+	trx.UserID = userID
 	trx.TransactionStatus = lib.Strptr("unpaid")
 	trx.Notes = api.Notes
 	trx.Description = api.Description
+	trx.InvoiceNo = api.InvoiceNo
 	if trx.InvoiceNo == nil {
 		trx.InvoiceNo = model.GenRefCount("Transaction", db)
 	}
 
+	user := model.User{}
+	db.Where(`id = ?`, userID).Take(&user)
+	trx.ContactName = lib.Strptr(lib.RevStr(user.FirstName) + " " + lib.RevStr(user.LastName))
+	trx.ContactDetail = user.PhoneNumber
+	if trx.ContactDetail == nil {
+		trx.ContactDetail = user.Email
+	}
+
 	var total float64 = 0
 	details := []model.TransactionDetail{}
+	ids := []uuid.UUID{}
 	if api.CartIds != nil {
 		carts := []model.Cart{}
 		db.Where(`id IN ?`, *api.CartIds).Preload("Product").Find(&carts)
@@ -56,6 +83,9 @@ func PostTransaction(c *fiber.Ctx) error {
 			}
 			details = append(details, detail)
 			total += price
+			if cart.ID != nil {
+				ids = append(ids, *cart.ID)
+			}
 		}
 		isDetails = true
 	}
@@ -75,6 +105,10 @@ func PostTransaction(c *fiber.Ctx) error {
 				return err
 			}
 			trx.Details = &details
+		}
+
+		if err := tx.Where(`id IN ?`, ids).Delete(&model.Cart{}).Error; err != nil {
+			return err
 		}
 
 		return nil

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 
 	"gorm.io/gorm"
 )
@@ -24,7 +25,7 @@ type ReferenceCountAPI struct {
 func (s *ReferenceCount) Seed() *[]ReferenceCount {
 	contents := []string{
 		"Transaction|INV|5",
-		"Payment|PY|5",
+		"Payment|PY|9",
 		"Product|PR|8",
 	}
 
@@ -56,7 +57,14 @@ func GenRefCount(name string, tx *gorm.DB) *string {
 	}
 
 	count := fmt.Sprint(*ref.Count + 1)
-	str := *ref.Prefix + "-" + strings.Repeat("0", *ref.Length-len(count)) + count
+	length := *ref.Length
+	if len(count) > length {
+		length = len(count) + 1
+	}
+	str := *ref.Prefix + "-" + strings.Repeat("0", length-len(count)) + count
+	if name == "Transaction" {
+		str = str + time.Now().Format("01-02-06")
+	}
 
 	if err := tx.Model(&ref).UpdateColumn("count", gorm.Expr("count + ?", 1)).Error; err != nil {
 		return nil
