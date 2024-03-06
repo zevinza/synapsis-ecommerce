@@ -2538,9 +2538,6 @@
                 "is_admin": {
                     "type": "boolean"
                 },
-                "refresh_token": {
-                    "type": "string"
-                },
                 "token_type": {
                     "type": "string"
                 }
@@ -2752,10 +2749,6 @@
                     "description": "IsAdmin",
                     "type": "boolean"
                 },
-                "is_verified": {
-                    "description": "IsVerified",
-                    "type": "boolean"
-                },
                 "last_login": {
                     "description": "LastLogin",
                     "type": "string",
@@ -2774,11 +2767,6 @@
                 "username": {
                     "description": "Username",
                     "type": "string"
-                },
-                "verification_code": {
-                    "description": "VerificationCode",
-                    "type": "string",
-                    "example": "2024"
                 }
             }
         },
@@ -2799,10 +2787,6 @@
                     "description": "IsAdmin",
                     "type": "boolean"
                 },
-                "is_verified": {
-                    "description": "IsVerified",
-                    "type": "boolean"
-                },
                 "last_login": {
                     "description": "LastLogin",
                     "type": "string",
@@ -2821,11 +2805,6 @@
                 "username": {
                     "description": "Username",
                     "type": "string"
-                },
-                "verification_code": {
-                    "description": "VerificationCode",
-                    "type": "string",
-                    "example": "2024"
                 }
             }
         }

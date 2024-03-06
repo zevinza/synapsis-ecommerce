@@ -1,15 +1,15 @@
 FROM golang:latest
 
-WORKDIR /api
+WORKDIR /app
 
-COPY ./go.mod go.sum ./
-
-RUN go mod download && go mod verify
+COPY go.mod .
 
 COPY . .
 
-RUN go build -v -o api
+RUN go mod tidy
 
+RUN go build -o -v api
+ 
 EXPOSE 8000
 
 CMD ["./api"]
