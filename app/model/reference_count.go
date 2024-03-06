@@ -25,8 +25,8 @@ type ReferenceCountAPI struct {
 func (s *ReferenceCount) Seed() *[]ReferenceCount {
 	contents := []string{
 		"Transaction|INV|5",
-		"Payment|PY|9",
-		"Product|PR|8",
+		"Payment|PY|4",
+		"Product|PR|7",
 	}
 
 	c := []ReferenceCount{}
@@ -63,7 +63,7 @@ func GenRefCount(name string, tx *gorm.DB) *string {
 	}
 	str := *ref.Prefix + "-" + strings.Repeat("0", length-len(count)) + count
 	if name == "Transaction" {
-		str = str + time.Now().Format("01-02-06")
+		str = str + "-" + time.Now().Format("020106")
 	}
 
 	if err := tx.Model(&ref).UpdateColumn("count", gorm.Expr("count + ?", 1)).Error; err != nil {

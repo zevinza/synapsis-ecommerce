@@ -4,9 +4,9 @@ import (
 	"api/app/lib"
 	"api/app/model"
 	"api/app/services"
+	"fmt"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 )
 
 // GetUserID godoc
@@ -25,19 +25,15 @@ import (
 // @Tags User
 func GetUserID(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext())
-	id, _ := uuid.Parse(c.Params("id"))
+	id := c.Params("id")
 
 	if !lib.GetXIsAdmin(c) && lib.GetXUserID(c) != nil {
-		id = *lib.GetXUserID(c)
+		id = fmt.Sprint(*lib.GetXUserID(c))
 	}
 
 	var data model.User
 	result := db.Model(&data).
-		Where(db.Where(model.User{
-			Base: model.Base{
-				ID: &id,
-			},
-		})).
+		Where(`id = ? OR username = ?`, id, id).
 		Take(&data)
 	if result.RowsAffected < 1 {
 		return lib.ErrorNotFound(c)

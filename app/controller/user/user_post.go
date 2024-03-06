@@ -6,6 +6,7 @@ import (
 	"api/app/services"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/spf13/viper"
 )
 
 // PostUser godoc
@@ -38,6 +39,7 @@ func PostUser(c *fiber.Ctx) error {
 	var data model.User
 	lib.Merge(api, &data)
 	data.CreatorID = lib.GetXUserID(c)
+	data.Password = lib.Strptr(lib.PasswordEncrypt("password", viper.GetString("SALT"), viper.GetString("AES")))
 
 	if err := db.Create(&data).Error; nil != err {
 		return lib.ErrorConflict(c, err.Error())

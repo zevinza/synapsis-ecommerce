@@ -34,6 +34,7 @@ func GetProductID(c *fiber.Ctx) error {
 				ID: &id,
 			},
 		})).
+		Preload("Category").
 		Take(&data)
 	if result.RowsAffected < 1 {
 		return lib.ErrorNotFound(c)

@@ -42,6 +42,9 @@ func PostTransactionPayment(c *fiber.Ctx) error {
 	var data model.TransactionPayment
 	lib.Merge(api, &data)
 	data.TransactionID = id
+	if data.PaidAt == nil {
+		data.PaidAt = lib.StrfmtNow()
+	}
 	if data.ReferenceNo == nil {
 		data.ReferenceNo = model.GenRefCount("Payment", db)
 	}

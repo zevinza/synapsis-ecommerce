@@ -2431,6 +2431,9 @@
                 "additional": {
                     "type": "string"
                 },
+                "category": {
+                    "$ref": "#/definitions/model.Category"
+                },
                 "category_id": {
                     "description": "CategoryID",
                     "type": "string",
@@ -2647,8 +2650,10 @@
             "type": "object",
             "properties": {
                 "cart_ids": {
-                    "type": "string",
-                    "format": "uuid"
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "description": {
                     "type": "string"

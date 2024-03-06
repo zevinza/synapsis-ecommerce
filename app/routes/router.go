@@ -85,5 +85,6 @@ func Handle(app *fiber.App) {
 	userAPI.Get("/", user.GetUser)
 	userAPI.Put("/:id", user.PutUser)
 	userAPI.Get("/:id", user.GetUserID)
+	userAPI.Post("/", user.PostUser)
 
 }

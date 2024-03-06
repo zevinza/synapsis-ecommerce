@@ -1,6 +1,12 @@
 package model
 
-import "github.com/go-openapi/strfmt"
+import (
+	"fmt"
+	"strings"
+
+	"github.com/go-openapi/strfmt"
+	"gorm.io/gorm"
+)
 
 // User User
 type User struct {
@@ -27,6 +33,26 @@ type UserPayload struct {
 	Email       *string `json:"email,omitempty" example:"armadamuhammads@gmail.com" validate:"required,email"`
 	Username    *string `json:"username,omitempty" example:"armadamuhammads"`
 	PhoneNumber *string `json:"phone_number,omitempty" example:"089678009400"`
+}
+
+func (s *User) BeforeCreate(tx *gorm.DB) error {
+	if s.Username == nil && s.Email != nil {
+		var count int64 = 0
+		prefix := strings.Split(*s.Email, "@")
+		tx.Model(&User{}).Where(`username = ?`, prefix[0]).Count(&count)
+
+		strCount := ""
+		if count > 0 {
+			strCount = fmt.Sprint(count)
+		}
+		usn := prefix[0] + strCount
+		s.Username = &usn
+	}
+	if s.IsAdmin == nil {
+		f := false
+		s.IsAdmin = &f
+	}
+	return s.Base.BeforeCreate(tx)
 }
 
 func (s *User) Seed() *[]User {

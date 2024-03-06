@@ -32,10 +32,6 @@ func PostAccountChangePassword(c *fiber.Ctx) error {
 		return lib.ErrorBadRequest(c, err)
 	}
 
-	if lib.RevStr(api.Password) != lib.RevStr(api.ConfirmPassword) {
-		return lib.ErrorBadRequest(c)
-	}
-
 	password := lib.PasswordEncrypt(lib.RevStr(api.Password), viper.GetString("SALT"), viper.GetString("AES"))
 
 	if row := db.Model(&model.User{}).

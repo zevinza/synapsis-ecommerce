@@ -56,6 +56,7 @@ func PostCart(c *fiber.Ctx) error {
 	if err := db.Create(&data).Error; nil != err {
 		return lib.ErrorConflict(c, err.Error())
 	}
+	data.Product = &product
 
 	return lib.Created(c, data)
 }

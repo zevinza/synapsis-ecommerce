@@ -172,6 +172,8 @@ definitions:
     properties:
       additional:
         type: string
+      category:
+        $ref: '#/definitions/model.Category'
       category_id:
         description: CategoryID
         format: uuid
@@ -325,8 +327,9 @@ definitions:
   model.TransactionPayload:
     properties:
       cart_ids:
-        format: uuid
-        type: string
+        items:
+          type: string
+        type: array
       description:
         type: string
       discount:

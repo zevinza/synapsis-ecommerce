@@ -37,13 +37,11 @@ func PostTransaction(c *fiber.Ctx) error {
 	}
 
 	trx := model.Transaction{}
+	lib.Merge(api, &trx)
 	trx.ID = transactionID
 	trx.CreatorID = userID
 	trx.UserID = userID
 	trx.TransactionStatus = lib.Strptr("unpaid")
-	trx.Notes = api.Notes
-	trx.Description = api.Description
-	trx.InvoiceNo = api.InvoiceNo
 	if trx.InvoiceNo == nil {
 		trx.InvoiceNo = model.GenRefCount("Transaction", db)
 	}
@@ -89,6 +87,7 @@ func PostTransaction(c *fiber.Ctx) error {
 		}
 		isDetails = true
 	}
+	trx.TotalProductPrice = lib.Float64ptr(total)
 	total = total - lib.RevFloat64(api.Discount) + lib.RevFloat64(api.Fee)
 	trx.TotalPrice = lib.Float64ptr(total)
 	trx.TotalDiscount = api.Discount

@@ -13,6 +13,7 @@ type Product struct {
 	Base
 	DataOwner
 	ProductAPI
+	Category *Category `json:"category,omitempty" gorm:"foreignKey:ID;references:CategoryID"`
 }
 
 // ProductAPI Product API

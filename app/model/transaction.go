@@ -25,14 +25,8 @@ type TransactionAPI struct {
 	ContactDetail     *string    `json:"contact_detail,omitempty"`
 }
 
-// type TransactionPayload struct {
-// 	Data    *TransactionAPI        `json:"data,omitempty"`
-// 	Payment *TransactionPaymentAPI `json:"payment,omitempty"`
-// 	CartIds *[]uuid.UUID           `json:"cart_ids,omitempty"`
-// }
-
 type TransactionPayload struct {
-	CartIds     *[]uuid.UUID `json:"cart_ids,omitempty" swaggertype:"string" format:"uuid"`
+	CartIds     *[]uuid.UUID `json:"cart_ids,omitempty"`
 	Notes       *string      `json:"notes,omitempty"`
 	InvoiceNo   *string      `json:"invoice_no,omitempty"`
 	Description *string      `json:"description,omitempty"`
