@@ -1,7 +1,15 @@
-FROM scratch
-COPY app.run /server
-COPY ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY nsswitch.conf /etc/nsswitch.conf
-COPY docs/swagger.json docs/swagger.json
-COPY logs logs
-CMD [ "/server" ]
+FROM golang:latest
+
+WORKDIR /app
+
+COPY go.mod .
+
+COPY . .
+
+RUN go mod tidy
+
+RUN go build -o -v api
+ 
+EXPOSE 8000
+
+CMD ["./api"]

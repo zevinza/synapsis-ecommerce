@@ -4,8 +4,6 @@ import (
 	"api/app/lib"
 	"api/app/model"
 	"api/app/services"
-	"fmt"
-	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/spf13/viper"
@@ -34,25 +32,14 @@ func PostAccountRegister(c *fiber.Ctx) error {
 		return lib.ErrorBadRequest(c, err)
 	}
 
-	if lib.RevStr(api.Password) != lib.RevStr(api.ConfirmPassword) {
-		return lib.ErrorBadRequest(c)
-	}
-
 	var user model.User
 	lib.Merge(api, &user)
 	user.Password = lib.Strptr(lib.PasswordEncrypt(lib.RevStr(api.Password), viper.GetString("SALT"), viper.GetString("AES")))
 	user.IsAdmin = lib.Boolptr(false)
-	if user.Username == nil {
-		var count int64 = 0
-		prefix := strings.Split(lib.RevStr(user.Email), "@")
-		db.Model(&model.User{}).Where(`username = ?`, prefix).Count(&count)
-
-		user.Username = lib.Strptr(prefix[0] + fmt.Sprint(count))
-	}
 
 	if err := db.Create(&user).Error; err != nil {
 		return lib.ErrorConflict(c, err)
 	}
 
-	return lib.OK(c)
+	return lib.OK(c, user)
 }

@@ -9,6 +9,21 @@ import (
 	"github.com/google/uuid"
 )
 
+// PostTransactionCancel godoc
+// @Summary Cancel Unpaid Transaction
+// @Description Cancel Unpaid Transaction
+// @Param id path string true "Transaction ID"
+// @Accept  application/json
+// @Produce application/json
+// @Success 201 {object} model.Transaction "Transaction data"
+// @Failure 400 {object} lib.Response
+// @Failure 404 {object} lib.Response
+// @Failure 409 {object} lib.Response
+// @Failure 500 {object} lib.Response
+// @Failure default {object} lib.Response
+// @Security ApiKeyAuth
+// @Router /transactions/{id}/cancel [post]
+// @Tags Transaction
 func PostTransactionCancel(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext())
 	id, _ := uuid.Parse(c.Params("id"))

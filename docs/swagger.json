@@ -62,6 +62,75 @@
                 }
             }
         },
+        "/accounts/change-password": {
+            "post": {
+                "security": [
+                    {
+                        "TokenKey": []
+                    }
+                ],
+                "description": "Change password",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "Change password",
+                "parameters": [
+                    {
+                        "description": "Account data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ChangePasswordAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/accounts/login": {
             "post": {
                 "security": [
@@ -322,7 +391,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.CartAPI"
+                            "$ref": "#/definitions/model.CartPayload"
                         }
                     }
                 ],
@@ -1146,6 +1215,112 @@
                 }
             }
         },
+        "/products/category/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List of Product by category ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Product"
+                ],
+                "summary": "List of Product by category ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number start from zero",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size per page, default `0`",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by field, adding dash (`-`) at the beginning means descending and vice versa",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Select specific fields with comma separated",
+                        "name": "fields",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "custom filters, see [more details](https://github.com/morkid/paginate#filter-format)",
+                        "name": "filters",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of Product",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/lib.Page"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Product"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/products/{id}": {
             "get": {
                 "security": [
@@ -1311,6 +1486,378 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "List of Transaction",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "List of Transaction",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number start from zero",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Size per page, default `0`",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Sort by field, adding dash (`-`) at the beginning means descending and vice versa",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Select specific fields with comma separated",
+                        "name": "fields",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "custom filters, see [more details](https://github.com/morkid/paginate#filter-format)",
+                        "name": "filters",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of Transaction",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/lib.Page"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "items": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/model.Transaction"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Post new Transaction",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Post new Transaction",
+                "parameters": [
+                    {
+                        "description": "Transaction data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.TransactionPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Transaction data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Transaction"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Get a Transaction by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Get a Transaction by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Transaction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Transaction data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Transaction"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/{id}/cancel": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Cancel Unpaid Transaction",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Cancel Unpaid Transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Transaction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Transaction data",
+                        "schema": {
+                            "$ref": "#/definitions/model.Transaction"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/lib.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/transactions/{id}/payment": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Pay Transaction",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Pay Transaction",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Transaction ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Payment data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.TransactionPaymentAPI"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Transaction data",
+                        "schema": {
+                            "$ref": "#/definitions/model.TransactionPayment"
                         }
                     },
                     "400": {
@@ -1716,6 +2263,9 @@
                 "additional": {
                     "type": "string"
                 },
+                "notes": {
+                    "type": "string"
+                },
                 "price": {
                     "description": "Price",
                     "type": "number",
@@ -1724,7 +2274,7 @@
                 "product": {
                     "$ref": "#/definitions/model.Product"
                 },
-                "productid": {
+                "product_id": {
                     "description": "ProductID",
                     "type": "string",
                     "format": "uuid"
@@ -1734,7 +2284,7 @@
                     "type": "integer",
                     "example": 1
                 },
-                "userid": {
+                "user_id": {
                     "description": "UserID",
                     "type": "string",
                     "format": "uuid"
@@ -1744,12 +2294,15 @@
         "model.CartAPI": {
             "type": "object",
             "properties": {
+                "notes": {
+                    "type": "string"
+                },
                 "price": {
                     "description": "Price",
                     "type": "number",
                     "example": 10000
                 },
-                "productid": {
+                "product_id": {
                     "description": "ProductID",
                     "type": "string",
                     "format": "uuid"
@@ -1759,10 +2312,28 @@
                     "type": "integer",
                     "example": 1
                 },
-                "userid": {
+                "user_id": {
                     "description": "UserID",
                     "type": "string",
                     "format": "uuid"
+                }
+            }
+        },
+        "model.CartPayload": {
+            "type": "object",
+            "properties": {
+                "notes": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "description": "ProductID",
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "quantity": {
+                    "description": "Quantity",
+                    "type": "integer",
+                    "example": 1
                 }
             }
         },
@@ -1799,6 +2370,29 @@
                 }
             }
         },
+        "model.ChangePasswordAPI": {
+            "type": "object",
+            "required": [
+                "confirm_password",
+                "email",
+                "password"
+            ],
+            "properties": {
+                "confirm_password": {
+                    "type": "string",
+                    "example": "@Password123"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "armadamuhammads@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "example": "@Password123"
+                }
+            }
+        },
         "model.LoginAPI": {
             "type": "object",
             "required": [
@@ -1808,7 +2402,7 @@
             "properties": {
                 "password": {
                     "type": "string",
-                    "example": "@Password123"
+                    "example": "password"
                 },
                 "remember": {
                     "type": "boolean",
@@ -1837,7 +2431,10 @@
                 "additional": {
                     "type": "string"
                 },
-                "categoryid": {
+                "category": {
+                    "$ref": "#/definitions/model.Category"
+                },
+                "category_id": {
                     "description": "CategoryID",
                     "type": "string",
                     "format": "uuid"
@@ -1866,7 +2463,7 @@
         "model.ProductAPI": {
             "type": "object",
             "properties": {
-                "categoryid": {
+                "category_id": {
                     "description": "CategoryID",
                     "type": "string",
                     "format": "uuid"
@@ -1925,6 +2522,10 @@
                 "phone_number": {
                     "type": "string",
                     "example": "089678009400"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "armadamuhammads"
                 }
             }
         },
@@ -1940,10 +2541,195 @@
                 "is_admin": {
                     "type": "boolean"
                 },
-                "refresh_token": {
+                "token_type": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Transaction": {
+            "type": "object",
+            "properties": {
+                "additional": {
                     "type": "string"
                 },
-                "token_type": {
+                "contact_detail": {
+                    "type": "string"
+                },
+                "contact_name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "details": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.TransactionDetail"
+                    }
+                },
+                "invoice_no": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "payments": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.TransactionPayment"
+                    }
+                },
+                "total_discount": {
+                    "type": "number"
+                },
+                "total_fee": {
+                    "type": "number"
+                },
+                "total_paid": {
+                    "type": "number"
+                },
+                "total_price": {
+                    "type": "number"
+                },
+                "total_productPrice": {
+                    "type": "number"
+                },
+                "transaction_status": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        },
+        "model.TransactionDetail": {
+            "type": "object",
+            "properties": {
+                "additional": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "product": {
+                    "$ref": "#/definitions/model.Product"
+                },
+                "product_description": {
+                    "type": "string"
+                },
+                "product_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "product_name": {
+                    "type": "string"
+                },
+                "product_price": {
+                    "type": "number"
+                },
+                "product_sku": {
+                    "type": "string"
+                },
+                "quantity": {
+                    "type": "integer"
+                },
+                "subtotal_price": {
+                    "type": "number"
+                },
+                "transaction": {
+                    "$ref": "#/definitions/model.Transaction"
+                },
+                "transaction_id": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        },
+        "model.TransactionPayload": {
+            "type": "object",
+            "properties": {
+                "cart_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "discount": {
+                    "type": "number"
+                },
+                "fee": {
+                    "type": "number"
+                },
+                "invoice_no": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.TransactionPayment": {
+            "type": "object",
+            "properties": {
+                "additional": {
+                    "type": "string"
+                },
+                "notes": {
+                    "type": "string"
+                },
+                "paid_amount": {
+                    "type": "number"
+                },
+                "paid_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reference_no": {
+                    "type": "string"
+                },
+                "transaction": {
+                    "$ref": "#/definitions/model.Transaction"
+                },
+                "transaction_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "via": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.TransactionPaymentAPI": {
+            "type": "object",
+            "properties": {
+                "notes": {
+                    "type": "string"
+                },
+                "paid_amount": {
+                    "type": "number"
+                },
+                "paid_at": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "reference_no": {
+                    "type": "string"
+                },
+                "transaction_id": {
+                    "type": "string",
+                    "format": "uuid"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "via": {
                     "type": "string"
                 }
             }
@@ -1959,34 +2745,26 @@
                     "type": "string",
                     "example": "armadamuhammads@gmail.com"
                 },
-                "firstname": {
+                "first_name": {
                     "description": "FirstName",
                     "type": "string",
                     "example": "Armada"
                 },
-                "isadmin": {
+                "is_admin": {
                     "description": "IsAdmin",
                     "type": "boolean"
                 },
-                "isverified": {
-                    "description": "IsVerified",
-                    "type": "boolean"
-                },
-                "lastlogin": {
+                "last_login": {
                     "description": "LastLogin",
                     "type": "string",
                     "format": "date-time"
                 },
-                "lastname": {
+                "last_name": {
                     "description": "LastName",
                     "type": "string",
                     "example": "Muhammad Siswanto"
                 },
-                "password": {
-                    "description": "Password",
-                    "type": "string"
-                },
-                "phonenumber": {
+                "phone_number": {
                     "description": "PhoneNumber",
                     "type": "string",
                     "example": "089678009400"
@@ -1994,11 +2772,6 @@
                 "username": {
                     "description": "Username",
                     "type": "string"
-                },
-                "verificationcode": {
-                    "description": "VerificationCode",
-                    "type": "string",
-                    "example": "2024"
                 }
             }
         },
@@ -2010,34 +2783,26 @@
                     "type": "string",
                     "example": "armadamuhammads@gmail.com"
                 },
-                "firstname": {
+                "first_name": {
                     "description": "FirstName",
                     "type": "string",
                     "example": "Armada"
                 },
-                "isadmin": {
+                "is_admin": {
                     "description": "IsAdmin",
                     "type": "boolean"
                 },
-                "isverified": {
-                    "description": "IsVerified",
-                    "type": "boolean"
-                },
-                "lastlogin": {
+                "last_login": {
                     "description": "LastLogin",
                     "type": "string",
                     "format": "date-time"
                 },
-                "lastname": {
+                "last_name": {
                     "description": "LastName",
                     "type": "string",
                     "example": "Muhammad Siswanto"
                 },
-                "password": {
-                    "description": "Password",
-                    "type": "string"
-                },
-                "phonenumber": {
+                "phone_number": {
                     "description": "PhoneNumber",
                     "type": "string",
                     "example": "089678009400"
@@ -2045,11 +2810,6 @@
                 "username": {
                     "description": "Username",
                     "type": "string"
-                },
-                "verificationcode": {
-                    "description": "VerificationCode",
-                    "type": "string",
-                    "example": "2024"
                 }
             }
         }

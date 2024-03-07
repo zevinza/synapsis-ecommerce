@@ -41,14 +41,14 @@ func PutCart(c *fiber.Ctx) error {
 				ID: &id,
 			},
 		})).
+		Preload("Product").
 		Take(&data)
 	if result.RowsAffected < 1 {
 		return lib.ErrorNotFound(c)
 	}
 
 	if lib.RevInt64(api.Quantity) != lib.RevInt64(data.Quantity) {
-		product := model.Product{}
-		db.Where(`id = ?`).Take(&product)
+		product := data.Product
 		data.Price = lib.Float64ptr(float64(lib.RevInt64(api.Quantity)) * lib.RevFloat64(product.Price))
 		data.Quantity = api.Quantity
 	}

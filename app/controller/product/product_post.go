@@ -37,6 +37,9 @@ func PostProduct(c *fiber.Ctx) error {
 	var data model.Product
 	lib.Merge(api, &data)
 	data.CreatorID = lib.GetXUserID(c)
+	if data.SKU == nil {
+		data.SKU = model.GenRefCount("Product", db)
+	}
 
 	if err := db.Create(&data).Error; nil != err {
 		return lib.ErrorConflict(c, err.Error())

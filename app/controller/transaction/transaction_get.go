@@ -24,13 +24,14 @@ import (
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
 // @Security ApiKeyAuth
-// @Router /Transactions [get]
+// @Router /transactions [get]
 // @Tags Transaction
 func GetTransaction(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext()).WithContext(c.UserContext())
 	pg := services.PG
 
 	mod := db.Model(&model.Transaction{}).Where(`user_id = ?`, lib.GetXUserID(c)).Preload("Details").Preload("Payments")
+
 
 	page := pg.With(mod).Request(c.Request()).Response(&[]model.Transaction{})
 

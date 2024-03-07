@@ -16,7 +16,7 @@ func Oauth2Authentication(c *fiber.Ctx) error {
 
 	auth := c.Get("Authorization")
 	if !strings.HasPrefix(auth, "Bearer") {
-		return lib.ErrorUnauthorized(c, "1")
+		return lib.ErrorUnauthorized(c, "Bearer token is needed")
 	}
 
 	claims, err := GetClaimsFromToken(strings.TrimPrefix(auth, "Bearer "))
