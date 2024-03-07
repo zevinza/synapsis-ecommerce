@@ -26,7 +26,7 @@ var Environment = map[string]interface{}{
 	"aes":              "mB53IvZupVcalBnlEPmLyl4xJD4YN6g4", // AES 256-bit must have key at least 32 byte
 	"salt":             "salt",
 	"header_token_key": "x-Token",
-	"value_token_key":  "v0x37KYbJqLodL0363Xa6jxaRTTN2eD1",
+	"value_token_key":  "v0x37KYbJqKodL0393Xa6jXaRTTN2eD1",
 	"token_key":        "secret-key",
 	"token_expire_in":  24,
 	"access_token":     "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFjNjdkYWFkLTVhODYtNDBlNi1hNzlhLTQ5ZGVhYWE2ZDg0YSIsImJ1c2luZXNzX2lkIjoiNmExYzEyZmQtNzEzNC00YTVhLTkwYmQtZGM1YzEyNmZkNThhIiwiYXVkIjoibXktY2xpZW50LWlkIiwiZXhwIjoxNjg2Njc3NzkyLCJzdWIiOiIxYzY3ZGFhZC01YTg2LTQwZTYtYTc5YS00OWRlYWFhNmQ4NGEifQ.-qbG3YQn6WsOvn5dEzIVCgUfA_wXmXjQcgWeBoK62KUyFtvyiOw5dAN9zWmZcnhBr0jMpME4nVVKlrP3gDvi0A",
