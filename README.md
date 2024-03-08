@@ -37,7 +37,7 @@ then you can login with this account,
 | `admin@mail.com` | `password` | `admin` |
 | `armadamuhammads@mail.com` | `password` | `user`|
 
-after susccessfully logged in, copy access_token from response, then fill Access Token Header with "Bearer [access_token]"
+after susccessfully logged in, copy access_token from response, then fill Access Token Header with "Bearer [access_token]"  
 please note that few endpoints is restricted to user role, to access these endpoints, you must login with administrator account above
 
 ## Entity Relationship Diagram
