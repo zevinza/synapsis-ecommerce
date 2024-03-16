@@ -3,10 +3,8 @@ package cart
 import (
 	"api/app/lib"
 	"api/app/model"
-	"api/app/services"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/google/uuid"
 )
 
 // PutCart godoc
@@ -31,34 +29,8 @@ func PutCart(c *fiber.Ctx) error {
 		return lib.ErrorBadRequest(c, err)
 	}
 
-	db := services.DB.WithContext(c.UserContext())
-	id, _ := uuid.Parse(c.Params("id"))
+	// db := services.DB.WithContext(c.UserContext())
+	// id, _ := uuid.Parse(c.Params("id"))
 
-	var data model.Cart
-	result := db.Model(&data).
-		Where(db.Where(model.Cart{
-			Base: model.Base{
-				ID: &id,
-			},
-		})).
-		Preload("Product").
-		Take(&data)
-	if result.RowsAffected < 1 {
-		return lib.ErrorNotFound(c)
-	}
-
-	if lib.RevInt64(api.Quantity) != lib.RevInt64(data.Quantity) {
-		product := data.Product
-		data.Price = lib.Float64ptr(float64(lib.RevInt64(api.Quantity)) * lib.RevFloat64(product.Price))
-		data.Quantity = api.Quantity
-	}
-
-	data.ModifierID = lib.GetXUserID(c)
-	data.Notes = api.Notes
-
-	if err := db.Model(&data).Updates(&data).Error; nil != err {
-		return lib.ErrorConflict(c, err.Error())
-	}
-
-	return lib.OK(c, data)
+	return lib.OK(c)
 }

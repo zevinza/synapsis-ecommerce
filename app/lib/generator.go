@@ -99,6 +99,15 @@ func RandomChars(length int) string {
 	return string(b)
 }
 
+func RandomNumber(length int) string {
+	var letters = []rune("0123456789")
+	b := make([]rune, length)
+	for i := range b {
+		b[i] = letters[mathRand.Intn(len(letters))]
+	}
+	return string(b)
+}
+
 // HashPassword func
 func HashPassword(password string) (string, error) {
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)

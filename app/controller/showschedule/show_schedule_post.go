@@ -1,4 +1,4 @@
-package category
+package showschedule
 
 import (
 	"api/app/lib"
@@ -8,33 +8,34 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// PostCategory godoc
-// @Summary Create new Category
-// @Description Create new Category
-// @Param data body model.CategoryAPI true "Category data"
+// PostShowSchedule godoc
+// @Summary Create new Show Schedule
+// @Description Create new Show Schedule
+// @Param data body model.ShowScheduleAPI true "Show Schedule data"
 // @Accept  application/json
 // @Produce application/json
-// @Success 201 {object} model.Category "Category data"
+// @Success 201 {object} model.ShowSchedule "Show Schedule data"
 // @Failure 400 {object} lib.Response
 // @Failure 404 {object} lib.Response
 // @Failure 409 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
 // @Security ApiKeyAuth
-// @Router /categories [post]
-// @Tags Category
-func PostCategory(c *fiber.Ctx) error {
+// @Router /show-schedules [post]
+// @Tags ShowSchedule
+func PostShowSchedule(c *fiber.Ctx) error {
 	if !lib.GetXIsAdmin(c) {
 		return lib.ErrorUnauthorized(c)
 	}
-	api := new(model.CategoryAPI)
+
+	api := new(model.ShowScheduleAPI)
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)
 	}
 
 	db := services.DB.WithContext(c.UserContext())
 
-	var data model.Category
+	var data model.ShowSchedule
 	lib.Merge(api, &data)
 	data.CreatorID = lib.GetXUserID(c)
 

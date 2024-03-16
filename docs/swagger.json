@@ -5,7 +5,7 @@
     "swagger": "2.0",
     "info": {
         "description": "API Documentation",
-        "title": "Synapsis E-Commerce",
+        "title": "MKP Cinema Ticketing",
         "contact": {
             "name": "Armada Muhammad Siswanto",
             "email": "armadamuhammads@gmail.com"
@@ -635,372 +635,6 @@
                 }
             }
         },
-        "/categories": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "List of Category",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "List of Category",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Page number start from zero",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Size per page, default `0`",
-                        "name": "size",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Sort by field, adding dash (`-`) at the beginning means descending and vice versa",
-                        "name": "sort",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Select specific fields with comma separated",
-                        "name": "fields",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "custom filters, see [more details](https://github.com/morkid/paginate#filter-format)",
-                        "name": "filters",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of Category",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/lib.Page"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "items": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Category"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Create new Category",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Create new Category",
-                "parameters": [
-                    {
-                        "description": "Category data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.CategoryAPI"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Category data",
-                        "schema": {
-                            "$ref": "#/definitions/model.Category"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/categories/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get a Category by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Get a Category by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Category ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Category data",
-                        "schema": {
-                            "$ref": "#/definitions/model.Category"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Update Category by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Update Category by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Category ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Category data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.CategoryAPI"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Category data",
-                        "schema": {
-                            "$ref": "#/definitions/model.Category"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Delete Category by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Category"
-                ],
-                "summary": "Delete Category by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Category ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "409": {
-                        "description": "Conflict",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/info.json": {
             "get": {
                 "description": "show info response",
@@ -1049,14 +683,14 @@
                 }
             }
         },
-        "/products": {
+        "/show-schedules": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "List of Product",
+                "description": "List of Show Schedule",
                 "consumes": [
                     "application/json"
                 ],
@@ -1064,9 +698,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Product"
+                    "ShowSchedule"
                 ],
-                "summary": "List of Product",
+                "summary": "List of Show Schedule",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1101,7 +735,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of Product",
+                        "description": "List of Show Schedule",
                         "schema": {
                             "allOf": [
                                 {
@@ -1113,7 +747,7 @@
                                         "items": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/model.Product"
+                                                "$ref": "#/definitions/model.ShowSchedule"
                                             }
                                         }
                                     }
@@ -1153,7 +787,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Create new Product",
+                "description": "Create new Show Schedule",
                 "consumes": [
                     "application/json"
                 ],
@@ -1161,25 +795,25 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Product"
+                    "ShowSchedule"
                 ],
-                "summary": "Create new Product",
+                "summary": "Create new Show Schedule",
                 "parameters": [
                     {
-                        "description": "Product data",
+                        "description": "Show Schedule data",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.ProductAPI"
+                            "$ref": "#/definitions/model.ShowScheduleAPI"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "Product data",
+                        "description": "Show Schedule data",
                         "schema": {
-                            "$ref": "#/definitions/model.Product"
+                            "$ref": "#/definitions/model.ShowSchedule"
                         }
                     },
                     "400": {
@@ -1215,14 +849,14 @@
                 }
             }
         },
-        "/products/category/{id}": {
+        "/show-schedules/{id}": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "List of Product by category ID",
+                "description": "Get a Show Schedule by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1230,43 +864,13 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Product"
+                    "ShowSchedule"
                 ],
-                "summary": "List of Product by category ID",
+                "summary": "Get a Show Schedule by id",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "description": "Page number start from zero",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Size per page, default `0`",
-                        "name": "size",
-                        "in": "query"
-                    },
-                    {
                         "type": "string",
-                        "description": "Sort by field, adding dash (`-`) at the beginning means descending and vice versa",
-                        "name": "sort",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Select specific fields with comma separated",
-                        "name": "fields",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "custom filters, see [more details](https://github.com/morkid/paginate#filter-format)",
-                        "name": "filters",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Category ID",
+                        "description": "Show Schedule ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1274,85 +878,9 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "List of Product",
+                        "description": "Show Schedule data",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/lib.Page"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "items": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/model.Product"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    },
-                    "default": {
-                        "description": "",
-                        "schema": {
-                            "$ref": "#/definitions/lib.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/products/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Get a Product by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Product"
-                ],
-                "summary": "Get a Product by id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Product ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Product data",
-                        "schema": {
-                            "$ref": "#/definitions/model.Product"
+                            "$ref": "#/definitions/model.ShowSchedule"
                         }
                     },
                     "400": {
@@ -1387,7 +915,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Update Product by id",
+                "description": "Update Show Schedule by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1395,32 +923,32 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Product"
+                    "ShowSchedule"
                 ],
-                "summary": "Update Product by id",
+                "summary": "Update Show Schedule by id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Product ID",
+                        "description": "Show Schedule ID",
                         "name": "id",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "Product data",
+                        "description": "Show Schedule data",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.ProductAPI"
+                            "$ref": "#/definitions/model.ShowScheduleAPI"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Product data",
+                        "description": "Show Schedule data",
                         "schema": {
-                            "$ref": "#/definitions/model.Product"
+                            "$ref": "#/definitions/model.ShowSchedule"
                         }
                     },
                     "400": {
@@ -1461,7 +989,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Delete Product by id",
+                "description": "Delete Show Schedule by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1469,13 +997,13 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Product"
+                    "ShowSchedule"
                 ],
-                "summary": "Delete Product by id",
+                "summary": "Delete Show Schedule by id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Product ID",
+                        "description": "Show Schedule ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -1620,7 +1148,7 @@
                 }
             }
         },
-        "/transactions/": {
+        "/transactions/{cart_id}": {
             "post": {
                 "security": [
                     {
@@ -1640,13 +1168,11 @@
                 "summary": "Post new Transaction",
                 "parameters": [
                     {
-                        "description": "Transaction data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionPayload"
-                        }
+                        "type": "string",
+                        "description": "Cart ID",
+                        "name": "cart_id",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2263,26 +1789,34 @@
                 "additional": {
                     "type": "string"
                 },
-                "notes": {
-                    "type": "string"
+                "expires_in": {
+                    "type": "integer"
                 },
                 "price": {
-                    "description": "Price",
-                    "type": "number",
-                    "example": 10000
+                    "type": "number"
                 },
-                "product": {
-                    "$ref": "#/definitions/model.Product"
+                "quantity": {
+                    "type": "integer"
                 },
-                "product_id": {
-                    "description": "ProductID",
+                "seat_ids": {
+                    "type": "string"
+                },
+                "seats": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Seat"
+                    }
+                },
+                "show_schedule": {
+                    "$ref": "#/definitions/model.ShowSchedule"
+                },
+                "show_schedule_id": {
+                    "description": "UserID",
                     "type": "string",
                     "format": "uuid"
                 },
-                "quantity": {
-                    "description": "Quantity",
-                    "type": "integer",
-                    "example": 1
+                "total_price": {
+                    "type": "number"
                 },
                 "user_id": {
                     "description": "UserID",
@@ -2294,23 +1828,25 @@
         "model.CartAPI": {
             "type": "object",
             "properties": {
-                "notes": {
-                    "type": "string"
+                "expires_in": {
+                    "type": "integer"
                 },
                 "price": {
-                    "description": "Price",
-                    "type": "number",
-                    "example": 10000
+                    "type": "number"
                 },
-                "product_id": {
-                    "description": "ProductID",
+                "quantity": {
+                    "type": "integer"
+                },
+                "seat_ids": {
+                    "type": "string"
+                },
+                "show_schedule_id": {
+                    "description": "UserID",
                     "type": "string",
                     "format": "uuid"
                 },
-                "quantity": {
-                    "description": "Quantity",
-                    "type": "integer",
-                    "example": 1
+                "total_price": {
+                    "type": "number"
                 },
                 "user_id": {
                     "description": "UserID",
@@ -2322,51 +1858,14 @@
         "model.CartPayload": {
             "type": "object",
             "properties": {
-                "notes": {
+                "seatIDs": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "showScheduleID": {
                     "type": "string"
-                },
-                "product_id": {
-                    "description": "ProductID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "quantity": {
-                    "description": "Quantity",
-                    "type": "integer",
-                    "example": 1
-                }
-            }
-        },
-        "model.Category": {
-            "type": "object",
-            "properties": {
-                "additional": {
-                    "type": "string"
-                },
-                "code": {
-                    "description": "Code",
-                    "type": "string",
-                    "example": "food"
-                },
-                "name": {
-                    "description": "Name",
-                    "type": "string",
-                    "example": "Food"
-                }
-            }
-        },
-        "model.CategoryAPI": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "description": "Code",
-                    "type": "string",
-                    "example": "food"
-                },
-                "name": {
-                    "description": "Name",
-                    "type": "string",
-                    "example": "Food"
                 }
             }
         },
@@ -2390,6 +1889,23 @@
                     "type": "string",
                     "minLength": 8,
                     "example": "@Password123"
+                }
+            }
+        },
+        "model.CinemaLocation": {
+            "type": "object",
+            "properties": {
+                "additional": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
@@ -2425,67 +1941,29 @@
                 }
             }
         },
-        "model.Product": {
+        "model.Movie": {
             "type": "object",
             "properties": {
                 "additional": {
                     "type": "string"
                 },
                 "category": {
-                    "$ref": "#/definitions/model.Category"
-                },
-                "category_id": {
-                    "description": "CategoryID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "description": {
-                    "description": "Description",
                     "type": "string"
                 },
-                "name": {
-                    "description": "Name",
-                    "type": "string",
-                    "example": "Sepatu"
-                },
-                "price": {
-                    "description": "Price",
-                    "type": "number",
-                    "example": 10000
-                },
-                "sku": {
-                    "description": "SKU",
-                    "type": "string",
-                    "example": "PR-0000001"
-                }
-            }
-        },
-        "model.ProductAPI": {
-            "type": "object",
-            "properties": {
-                "category_id": {
-                    "description": "CategoryID",
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "description": {
-                    "description": "Description",
+                "code": {
                     "type": "string"
                 },
+                "director": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "number"
+                },
                 "name": {
-                    "description": "Name",
-                    "type": "string",
-                    "example": "Sepatu"
+                    "type": "string"
                 },
-                "price": {
-                    "description": "Price",
-                    "type": "number",
-                    "example": 10000
-                },
-                "sku": {
-                    "description": "SKU",
-                    "type": "string",
-                    "example": "PR-0000001"
+                "producer": {
+                    "type": "string"
                 }
             }
         },
@@ -2546,10 +2024,173 @@
                 }
             }
         },
+        "model.Seat": {
+            "type": "object",
+            "properties": {
+                "additional": {
+                    "type": "string"
+                },
+                "characteristic": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "column": {
+                    "type": "string"
+                },
+                "is_available": {
+                    "type": "boolean"
+                },
+                "row": {
+                    "type": "string"
+                },
+                "seat_layout_id": {
+                    "type": "string"
+                },
+                "show_schedule_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ShowSchedule": {
+            "type": "object",
+            "properties": {
+                "additional": {
+                    "type": "string"
+                },
+                "cinema_location": {
+                    "$ref": "#/definitions/model.CinemaLocation"
+                },
+                "cinema_location_id": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "is_start": {
+                    "type": "boolean"
+                },
+                "movie": {
+                    "$ref": "#/definitions/model.Movie"
+                },
+                "movie_id": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "start_time": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "theater": {
+                    "$ref": "#/definitions/model.Theater"
+                },
+                "theater_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ShowScheduleAPI": {
+            "type": "object",
+            "properties": {
+                "cinema_location_id": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "is_start": {
+                    "type": "boolean"
+                },
+                "movie_id": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "start_time": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "theater_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Theater": {
+            "type": "object",
+            "properties": {
+                "additional": {
+                    "type": "string"
+                },
+                "cinema_location_id": {
+                    "type": "string"
+                },
+                "code": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Ticket": {
+            "type": "object",
+            "properties": {
+                "additional": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "is_activated": {
+                    "type": "boolean"
+                },
+                "is_printed": {
+                    "type": "boolean"
+                },
+                "location_name": {
+                    "type": "string"
+                },
+                "movie_name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "reference_number": {
+                    "type": "string"
+                },
+                "seat_code": {
+                    "type": "string"
+                },
+                "show_schedule_id": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "theater_name": {
+                    "type": "string"
+                },
+                "transaction_id": {
+                    "type": "string"
+                }
+            }
+        },
         "model.Transaction": {
             "type": "object",
             "properties": {
                 "additional": {
+                    "type": "string"
+                },
+                "booking_code": {
                     "type": "string"
                 },
                 "contact_detail": {
@@ -2558,25 +2199,13 @@
                 "contact_name": {
                     "type": "string"
                 },
-                "description": {
-                    "type": "string"
-                },
-                "details": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/model.TransactionDetail"
-                    }
-                },
                 "invoice_no": {
                     "type": "string"
                 },
-                "notes": {
-                    "type": "string"
-                },
-                "payments": {
+                "tickets": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/model.TransactionPayment"
+                        "$ref": "#/definitions/model.Ticket"
                     }
                 },
                 "total_discount": {
@@ -2591,7 +2220,7 @@
                 "total_price": {
                     "type": "number"
                 },
-                "total_productPrice": {
+                "total_ticket_price": {
                     "type": "number"
                 },
                 "transaction_status": {
@@ -2600,75 +2229,6 @@
                 "user_id": {
                     "type": "string",
                     "format": "uuid"
-                }
-            }
-        },
-        "model.TransactionDetail": {
-            "type": "object",
-            "properties": {
-                "additional": {
-                    "type": "string"
-                },
-                "notes": {
-                    "type": "string"
-                },
-                "product": {
-                    "$ref": "#/definitions/model.Product"
-                },
-                "product_description": {
-                    "type": "string"
-                },
-                "product_id": {
-                    "type": "string",
-                    "format": "uuid"
-                },
-                "product_name": {
-                    "type": "string"
-                },
-                "product_price": {
-                    "type": "number"
-                },
-                "product_sku": {
-                    "type": "string"
-                },
-                "quantity": {
-                    "type": "integer"
-                },
-                "subtotal_price": {
-                    "type": "number"
-                },
-                "transaction": {
-                    "$ref": "#/definitions/model.Transaction"
-                },
-                "transaction_id": {
-                    "type": "string",
-                    "format": "uuid"
-                }
-            }
-        },
-        "model.TransactionPayload": {
-            "type": "object",
-            "properties": {
-                "cart_ids": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "description": {
-                    "type": "string"
-                },
-                "discount": {
-                    "type": "number"
-                },
-                "fee": {
-                    "type": "number"
-                },
-                "invoice_no": {
-                    "type": "string"
-                },
-                "notes": {
-                    "type": "string"
                 }
             }
         },

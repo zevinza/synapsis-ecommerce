@@ -1,4 +1,4 @@
-package category
+package showschedule
 
 import (
 	"api/app/lib"
@@ -9,27 +9,28 @@ import (
 	"github.com/google/uuid"
 )
 
-// PutCategory godoc
-// @Summary Update Category by id
-// @Description Update Category by id
-// @Param id path string true "Category ID"
-// @Param data body model.CategoryAPI true "Category data"
+// PutShowSchedule godoc
+// @Summary Update Show Schedule by id
+// @Description Update Show Schedule by id
+// @Param id path string true "Show Schedule ID"
+// @Param data body model.ShowScheduleAPI true "Show Schedule data"
 // @Accept  application/json
 // @Produce application/json
-// @Success 200 {object} model.Category "Category data"
+// @Success 200 {object} model.ShowSchedule "Show Schedule data"
 // @Failure 400 {object} lib.Response
 // @Failure 404 {object} lib.Response
 // @Failure 409 {object} lib.Response
 // @Failure 500 {object} lib.Response
 // @Failure default {object} lib.Response
 // @Security ApiKeyAuth
-// @Router /categories/{id} [put]
-// @Tags Category
-func PutCategory(c *fiber.Ctx) error {
+// @Router /show-schedules/{id} [put]
+// @Tags ShowSchedule
+func PutShowSchedule(c *fiber.Ctx) error {
 	if !lib.GetXIsAdmin(c) {
 		return lib.ErrorUnauthorized(c)
 	}
-	api := new(model.CategoryAPI)
+
+	api := new(model.ShowScheduleAPI)
 	if err := lib.BodyParser(c, api); nil != err {
 		return lib.ErrorBadRequest(c, err)
 	}
@@ -37,9 +38,9 @@ func PutCategory(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext())
 	id, _ := uuid.Parse(c.Params("id"))
 
-	var data model.Category
+	var data model.ShowSchedule
 	result := db.Model(&data).
-		Where(db.Where(model.Category{
+		Where(db.Where(model.ShowSchedule{
 			Base: model.Base{
 				ID: &id,
 			},

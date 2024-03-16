@@ -4,12 +4,12 @@ import (
 	"api/app/controller"
 	"api/app/controller/account"
 	"api/app/controller/cart"
-	"api/app/controller/category"
-	"api/app/controller/product"
+	"api/app/controller/showschedule"
 	"api/app/controller/transaction"
 	"api/app/controller/user"
 	"api/app/lib"
 	"api/app/middleware"
+	"api/app/scheduler"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -26,6 +26,8 @@ func Handle(app *fiber.App) {
 			lib.PrintStackTrace(e)
 		},
 	}))
+
+	go scheduler.CartScheduler()
 
 	api := app.Group(viper.GetString("ENDPOINT"))
 
@@ -51,24 +53,14 @@ func Handle(app *fiber.App) {
 	cartAPI.Get("/:id", cart.GetCartID)
 	cartAPI.Delete("/:id", cart.DeleteCart)
 
-	// Category
-	categoryAPI := api.Group("/categories")
-	categoryAPI.Use(middleware.Oauth2Authentication)
-	categoryAPI.Post("/", category.PostCategory)
-	categoryAPI.Get("/", category.GetCategory)
-	categoryAPI.Put("/:id", category.PutCategory)
-	categoryAPI.Get("/:id", category.GetCategoryID)
-	categoryAPI.Delete("/:id", category.DeleteCategory)
-
-	// Product
-	productAPI := api.Group("/products")
-	productAPI.Use(middleware.Oauth2Authentication)
-	productAPI.Post("/", product.PostProduct)
-	productAPI.Get("/", product.GetProduct)
-	productAPI.Get("/category/:id", product.GetProductCategory)
-	productAPI.Put("/:id", product.PutProduct)
-	productAPI.Get("/:id", product.GetProductID)
-	productAPI.Delete("/:id", product.DeleteProduct)
+	// Show Schedule
+	showscheduleAPI := api.Group("/show-schedules")
+	showscheduleAPI.Use(middleware.TokenValidator())
+	showscheduleAPI.Post("/", showschedule.PostShowSchedule)
+	showscheduleAPI.Get("/", showschedule.GetShowSchedule)
+	showscheduleAPI.Put("/:id", showschedule.PutShowSchedule)
+	showscheduleAPI.Get("/:id", showschedule.GetShowScheduleID)
+	showscheduleAPI.Delete("/:id", showschedule.DeleteShowSchedule)
 
 	// transaction
 	transactionAPI := api.Group("/transactions")

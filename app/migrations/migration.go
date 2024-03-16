@@ -5,11 +5,15 @@ import "api/app/model"
 // ModelMigrations models to automigrate
 var ModelMigrations = []interface{}{
 	model.Cart{},
-	model.Category{},
-	model.Product{},
+	model.CinemaLocation{},
+	model.Movie{},
 	model.ReferenceCount{},
+	model.Seat{},
+	model.SeatLayout{},
+	model.ShowSchedule{},
+	model.Theater{},
+	model.Ticket{},
 	model.Transaction{},
-	model.TransactionDetail{},
 	model.TransactionPayment{},
 	model.User{},
 }

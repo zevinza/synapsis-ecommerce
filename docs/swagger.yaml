@@ -50,22 +50,26 @@ definitions:
     properties:
       additional:
         type: string
-      notes:
-        type: string
+      expires_in:
+        type: integer
       price:
-        description: Price
-        example: 10000
         type: number
-      product:
-        $ref: '#/definitions/model.Product'
-      product_id:
-        description: ProductID
+      quantity:
+        type: integer
+      seat_ids:
+        type: string
+      seats:
+        items:
+          $ref: '#/definitions/model.Seat'
+        type: array
+      show_schedule:
+        $ref: '#/definitions/model.ShowSchedule'
+      show_schedule_id:
+        description: UserID
         format: uuid
         type: string
-      quantity:
-        description: Quantity
-        example: 1
-        type: integer
+      total_price:
+        type: number
       user_id:
         description: UserID
         format: uuid
@@ -73,20 +77,20 @@ definitions:
     type: object
   model.CartAPI:
     properties:
-      notes:
-        type: string
+      expires_in:
+        type: integer
       price:
-        description: Price
-        example: 10000
         type: number
-      product_id:
-        description: ProductID
+      quantity:
+        type: integer
+      seat_ids:
+        type: string
+      show_schedule_id:
+        description: UserID
         format: uuid
         type: string
-      quantity:
-        description: Quantity
-        example: 1
-        type: integer
+      total_price:
+        type: number
       user_id:
         description: UserID
         format: uuid
@@ -94,39 +98,11 @@ definitions:
     type: object
   model.CartPayload:
     properties:
-      notes:
-        type: string
-      product_id:
-        description: ProductID
-        format: uuid
-        type: string
-      quantity:
-        description: Quantity
-        example: 1
-        type: integer
-    type: object
-  model.Category:
-    properties:
-      additional:
-        type: string
-      code:
-        description: Code
-        example: food
-        type: string
-      name:
-        description: Name
-        example: Food
-        type: string
-    type: object
-  model.CategoryAPI:
-    properties:
-      code:
-        description: Code
-        example: food
-        type: string
-      name:
-        description: Name
-        example: Food
+      seatIDs:
+        items:
+          type: string
+        type: array
+      showScheduleID:
         type: string
     type: object
   model.ChangePasswordAPI:
@@ -145,6 +121,17 @@ definitions:
     - confirm_password
     - email
     - password
+    type: object
+  model.CinemaLocation:
+    properties:
+      additional:
+        type: string
+      address:
+        type: string
+      code:
+        type: string
+      name:
+        type: string
     type: object
   model.LoginAPI:
     properties:
@@ -168,52 +155,21 @@ definitions:
       user:
         $ref: '#/definitions/model.User'
     type: object
-  model.Product:
+  model.Movie:
     properties:
       additional:
         type: string
       category:
-        $ref: '#/definitions/model.Category'
-      category_id:
-        description: CategoryID
-        format: uuid
         type: string
-      description:
-        description: Description
+      code:
         type: string
-      name:
-        description: Name
-        example: Sepatu
+      director:
         type: string
-      price:
-        description: Price
-        example: 10000
+      duration:
         type: number
-      sku:
-        description: SKU
-        example: PR-0000001
-        type: string
-    type: object
-  model.ProductAPI:
-    properties:
-      category_id:
-        description: CategoryID
-        format: uuid
-        type: string
-      description:
-        description: Description
-        type: string
       name:
-        description: Name
-        example: Sepatu
         type: string
-      price:
-        description: Price
-        example: 10000
-        type: number
-      sku:
-        description: SKU
-        example: PR-0000001
+      producer:
         type: string
     type: object
   model.RegistrationAPI:
@@ -257,27 +213,128 @@ definitions:
       token_type:
         type: string
     type: object
+  model.Seat:
+    properties:
+      additional:
+        type: string
+      characteristic:
+        type: string
+      code:
+        type: string
+      column:
+        type: string
+      is_available:
+        type: boolean
+      row:
+        type: string
+      seat_layout_id:
+        type: string
+      show_schedule_id:
+        type: string
+    type: object
+  model.ShowSchedule:
+    properties:
+      additional:
+        type: string
+      cinema_location:
+        $ref: '#/definitions/model.CinemaLocation'
+      cinema_location_id:
+        type: string
+      date:
+        format: date
+        type: string
+      is_start:
+        type: boolean
+      movie:
+        $ref: '#/definitions/model.Movie'
+      movie_id:
+        type: string
+      price:
+        type: number
+      start_time:
+        format: date-time
+        type: string
+      theater:
+        $ref: '#/definitions/model.Theater'
+      theater_id:
+        type: string
+    type: object
+  model.ShowScheduleAPI:
+    properties:
+      cinema_location_id:
+        type: string
+      date:
+        format: date
+        type: string
+      is_start:
+        type: boolean
+      movie_id:
+        type: string
+      price:
+        type: number
+      start_time:
+        format: date-time
+        type: string
+      theater_id:
+        type: string
+    type: object
+  model.Theater:
+    properties:
+      additional:
+        type: string
+      cinema_location_id:
+        type: string
+      code:
+        type: string
+      name:
+        type: string
+    type: object
+  model.Ticket:
+    properties:
+      additional:
+        type: string
+      date:
+        format: date
+        type: string
+      is_activated:
+        type: boolean
+      is_printed:
+        type: boolean
+      location_name:
+        type: string
+      movie_name:
+        type: string
+      price:
+        type: number
+      reference_number:
+        type: string
+      seat_code:
+        type: string
+      show_schedule_id:
+        type: string
+      start_time:
+        format: date-time
+        type: string
+      theater_name:
+        type: string
+      transaction_id:
+        type: string
+    type: object
   model.Transaction:
     properties:
       additional:
+        type: string
+      booking_code:
         type: string
       contact_detail:
         type: string
       contact_name:
         type: string
-      description:
-        type: string
-      details:
-        items:
-          $ref: '#/definitions/model.TransactionDetail'
-        type: array
       invoice_no:
         type: string
-      notes:
-        type: string
-      payments:
+      tickets:
         items:
-          $ref: '#/definitions/model.TransactionPayment'
+          $ref: '#/definitions/model.Ticket'
         type: array
       total_discount:
         type: number
@@ -287,58 +344,12 @@ definitions:
         type: number
       total_price:
         type: number
-      total_productPrice:
+      total_ticket_price:
         type: number
       transaction_status:
         type: string
       user_id:
         format: uuid
-        type: string
-    type: object
-  model.TransactionDetail:
-    properties:
-      additional:
-        type: string
-      notes:
-        type: string
-      product:
-        $ref: '#/definitions/model.Product'
-      product_description:
-        type: string
-      product_id:
-        format: uuid
-        type: string
-      product_name:
-        type: string
-      product_price:
-        type: number
-      product_sku:
-        type: string
-      quantity:
-        type: integer
-      subtotal_price:
-        type: number
-      transaction:
-        $ref: '#/definitions/model.Transaction'
-      transaction_id:
-        format: uuid
-        type: string
-    type: object
-  model.TransactionPayload:
-    properties:
-      cart_ids:
-        items:
-          type: string
-        type: array
-      description:
-        type: string
-      discount:
-        type: number
-      fee:
-        type: number
-      invoice_no:
-        type: string
-      notes:
         type: string
     type: object
   model.TransactionPayment:
@@ -449,7 +460,7 @@ info:
     email: armadamuhammads@gmail.com
     name: Armada Muhammad Siswanto
   description: API Documentation
-  title: Synapsis E-Commerce
+  title: MKP Cinema Ticketing
   version: 1.0.0
 paths:
   /:
@@ -849,240 +860,6 @@ paths:
       summary: Update Cart by id
       tags:
       - Cart
-  /categories:
-    get:
-      consumes:
-      - application/json
-      description: List of Category
-      parameters:
-      - description: Page number start from zero
-        in: query
-        name: page
-        type: integer
-      - description: Size per page, default `0`
-        in: query
-        name: size
-        type: integer
-      - description: Sort by field, adding dash (`-`) at the beginning means descending
-          and vice versa
-        in: query
-        name: sort
-        type: string
-      - description: Select specific fields with comma separated
-        in: query
-        name: fields
-        type: string
-      - description: custom filters, see [more details](https://github.com/morkid/paginate#filter-format)
-        in: query
-        name: filters
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: List of Category
-          schema:
-            allOf:
-            - $ref: '#/definitions/lib.Page'
-            - properties:
-                items:
-                  items:
-                    $ref: '#/definitions/model.Category'
-                  type: array
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: List of Category
-      tags:
-      - Category
-    post:
-      consumes:
-      - application/json
-      description: Create new Category
-      parameters:
-      - description: Category data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.CategoryAPI'
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Category data
-          schema:
-            $ref: '#/definitions/model.Category'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Create new Category
-      tags:
-      - Category
-  /categories/{id}:
-    delete:
-      consumes:
-      - application/json
-      description: Delete Category by id
-      parameters:
-      - description: Category ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Delete Category by id
-      tags:
-      - Category
-    get:
-      consumes:
-      - application/json
-      description: Get a Category by id
-      parameters:
-      - description: Category ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Category data
-          schema:
-            $ref: '#/definitions/model.Category'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Get a Category by id
-      tags:
-      - Category
-    put:
-      consumes:
-      - application/json
-      description: Update Category by id
-      parameters:
-      - description: Category ID
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Category data
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.CategoryAPI'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Category data
-          schema:
-            $ref: '#/definitions/model.Category'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "409":
-          description: Conflict
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Update Category by id
-      tags:
-      - Category
   /info.json:
     get:
       consumes:
@@ -1115,11 +892,11 @@ paths:
       summary: show info response
       tags:
       - API
-  /products:
+  /show-schedules:
     get:
       consumes:
       - application/json
-      description: List of Product
+      description: List of Show Schedule
       parameters:
       - description: Page number start from zero
         in: query
@@ -1146,14 +923,14 @@ paths:
       - application/json
       responses:
         "200":
-          description: List of Product
+          description: List of Show Schedule
           schema:
             allOf:
             - $ref: '#/definitions/lib.Page'
             - properties:
                 items:
                   items:
-                    $ref: '#/definitions/model.Product'
+                    $ref: '#/definitions/model.ShowSchedule'
                   type: array
               type: object
         "400":
@@ -1174,27 +951,27 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: List of Product
+      summary: List of Show Schedule
       tags:
-      - Product
+      - ShowSchedule
     post:
       consumes:
       - application/json
-      description: Create new Product
+      description: Create new Show Schedule
       parameters:
-      - description: Product data
+      - description: Show Schedule data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.ProductAPI'
+          $ref: '#/definitions/model.ShowScheduleAPI'
       produces:
       - application/json
       responses:
         "201":
-          description: Product data
+          description: Show Schedule data
           schema:
-            $ref: '#/definitions/model.Product'
+            $ref: '#/definitions/model.ShowSchedule'
         "400":
           description: Bad Request
           schema:
@@ -1217,16 +994,16 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Create new Product
+      summary: Create new Show Schedule
       tags:
-      - Product
-  /products/{id}:
+      - ShowSchedule
+  /show-schedules/{id}:
     delete:
       consumes:
       - application/json
-      description: Delete Product by id
+      description: Delete Show Schedule by id
       parameters:
-      - description: Product ID
+      - description: Show Schedule ID
         in: path
         name: id
         required: true
@@ -1260,15 +1037,15 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Delete Product by id
+      summary: Delete Show Schedule by id
       tags:
-      - Product
+      - ShowSchedule
     get:
       consumes:
       - application/json
-      description: Get a Product by id
+      description: Get a Show Schedule by id
       parameters:
-      - description: Product ID
+      - description: Show Schedule ID
         in: path
         name: id
         required: true
@@ -1277,9 +1054,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: Product data
+          description: Show Schedule data
           schema:
-            $ref: '#/definitions/model.Product'
+            $ref: '#/definitions/model.ShowSchedule'
         "400":
           description: Bad Request
           schema:
@@ -1298,32 +1075,32 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Get a Product by id
+      summary: Get a Show Schedule by id
       tags:
-      - Product
+      - ShowSchedule
     put:
       consumes:
       - application/json
-      description: Update Product by id
+      description: Update Show Schedule by id
       parameters:
-      - description: Product ID
+      - description: Show Schedule ID
         in: path
         name: id
         required: true
         type: string
-      - description: Product data
+      - description: Show Schedule data
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.ProductAPI'
+          $ref: '#/definitions/model.ShowScheduleAPI'
       produces:
       - application/json
       responses:
         "200":
-          description: Product data
+          description: Show Schedule data
           schema:
-            $ref: '#/definitions/model.Product'
+            $ref: '#/definitions/model.ShowSchedule'
         "400":
           description: Bad Request
           schema:
@@ -1346,76 +1123,9 @@ paths:
             $ref: '#/definitions/lib.Response'
       security:
       - ApiKeyAuth: []
-      summary: Update Product by id
+      summary: Update Show Schedule by id
       tags:
-      - Product
-  /products/category/{id}:
-    get:
-      consumes:
-      - application/json
-      description: List of Product by category ID
-      parameters:
-      - description: Page number start from zero
-        in: query
-        name: page
-        type: integer
-      - description: Size per page, default `0`
-        in: query
-        name: size
-        type: integer
-      - description: Sort by field, adding dash (`-`) at the beginning means descending
-          and vice versa
-        in: query
-        name: sort
-        type: string
-      - description: Select specific fields with comma separated
-        in: query
-        name: fields
-        type: string
-      - description: custom filters, see [more details](https://github.com/morkid/paginate#filter-format)
-        in: query
-        name: filters
-        type: string
-      - description: Category ID
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: List of Product
-          schema:
-            allOf:
-            - $ref: '#/definitions/lib.Page'
-            - properties:
-                items:
-                  items:
-                    $ref: '#/definitions/model.Product'
-                  type: array
-              type: object
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/lib.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/lib.Response'
-        default:
-          description: ""
-          schema:
-            $ref: '#/definitions/lib.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: List of Product by category ID
-      tags:
-      - Product
+      - ShowSchedule
   /transactions:
     get:
       consumes:
@@ -1478,18 +1188,17 @@ paths:
       summary: List of Transaction
       tags:
       - Transaction
-  /transactions/:
+  /transactions/{cart_id}:
     post:
       consumes:
       - application/json
       description: Post new Transaction
       parameters:
-      - description: Transaction data
-        in: body
-        name: data
+      - description: Cart ID
+        in: path
+        name: cart_id
         required: true
-        schema:
-          $ref: '#/definitions/model.TransactionPayload'
+        type: string
       produces:
       - application/json
       responses:

@@ -30,7 +30,11 @@ func GetCart(c *fiber.Ctx) error {
 	db := services.DB.WithContext(c.UserContext()).WithContext(c.UserContext())
 	pg := services.PG
 
-	mod := db.Model(&model.Cart{}).Where(`user_id = ?`, lib.GetXUserID(c)).Joins("Product")
+	mod := db.Model(&model.Cart{}).Where(`user_id = ?`, lib.GetXUserID(c)).
+		Preload("ShowSchedule").
+		Preload("ShowSchedule.Movie").
+		Preload("ShowSchedule.CinemaLocation").
+		Preload("ShowSchedule.Theater")
 
 	page := pg.With(mod).Request(c.Request()).Response(&[]model.Cart{})
 

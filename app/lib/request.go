@@ -1,7 +1,6 @@
 package lib
 
 import (
-	"api/app/model"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -17,6 +16,12 @@ import (
 
 // VALIDATOR validate request body
 var VALIDATOR *validator.Validate = validator.New()
+
+type Auth struct {
+	UserID  *uuid.UUID `json:"user_id,omitempty"`
+	IsAdmin *bool      `json:"is_admin,omitempty"`
+	Exp     *int64     `json:"exp,omitempty"`
+}
 
 // init Register custom validation function
 func init() {
@@ -86,7 +91,7 @@ func GetXUserID(c *fiber.Ctx) *uuid.UUID {
 		return nil
 	}
 
-	auth := model.Auth{}
+	auth := Auth{}
 	err = json.Unmarshal(js, &auth)
 	if err != nil {
 		return nil
@@ -106,7 +111,7 @@ func GetXIsAdmin(c *fiber.Ctx) bool {
 		return false
 	}
 
-	auth := model.Auth{}
+	auth := Auth{}
 	err = json.Unmarshal(js, &auth)
 	if err != nil {
 		return false

@@ -17,7 +17,7 @@ func init() {
 	services.InitRedis()
 }
 
-// @title Synapsis E-Commerce
+// @title MKP Cinema Ticketing
 // @version 1.0.0
 // @description API Documentation
 // @contact.name Armada Muhammad Siswanto

@@ -25,7 +25,7 @@ type ReferenceCountAPI struct {
 func (s *ReferenceCount) Seed() *[]ReferenceCount {
 	contents := []string{
 		"Transaction|INV|5",
-		"Payment|PY|4",
+		"Ticket|TC|8",
 		"Product|PR|7",
 	}
 

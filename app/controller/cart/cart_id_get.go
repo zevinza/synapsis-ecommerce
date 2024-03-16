@@ -34,7 +34,10 @@ func GetCartID(c *fiber.Ctx) error {
 				ID: &id,
 			},
 		})).
-		Joins("Product").
+		Preload("ShowSchedule").
+		Preload("ShowSchedule.Movie").
+		Preload("ShowSchedule.CinemaLocation").
+		Preload("ShowSchedule.Theater").
 		Take(&data)
 	if result.RowsAffected < 1 {
 		return lib.ErrorNotFound(c)
